@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>VNL Live Scoreboard</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: transparent;
+      font-family: "Impact", "Arial Black", sans-serif;
+      user-select: none;
+    }
+
+    /* กล่องสกอร์บอร์ดรวม */
+    .scoreboard-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 380px;
+    }
+
+    /* แถบทีมสไตล์ VNL (เอียง Skew) */
+    .team-bar {
+      display: flex;
+      align-items: center;
+      height: 48px;
+      background: #11141a;
+      color: #ffffff;
+      transform: skewX(-14deg);
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      position: relative;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    /* แถบสีประจำทีม */
+    .team-bar.home { border-left: 8px solid #0055d4; }
+    .team-bar.away { border-left: 8px solid #e60026; }
+
+    /* ป้ายชื่อทีม */
+    .team-name {
+      font-size: 24px;
+      padding-left: 15px;
+      letter-spacing: 1.5px;
+      flex-grow: 1;
+      transform: skewX(14deg); /* ปรับข้อความให้ตรง */
+    }
+
+    /* กล่องคะแนน */
+    .score-box {
+      width: 60px;
+      height: 100%;
+      background: #1e232d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      color: #ffd700;
+      border-left: 2px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .score-text {
+      transform: skewX(14deg); /* ปรับตัวเลขให้ตรง */
+      display: inline-block;
+    }
+
+    /* --- Keyframes สำหรับ Animation สไลด์ --- */
+
+    /* 1. แถบทีมสไลด์พุ่ง */
+    .slide-thrust {
+      animation: barThrust 0.45s ease-out;
+    }
+
+    @keyframes barThrust {
+      0% { transform: skewX(-14deg) translateX(0); }
+      40% { transform: skewX(-14deg) translateX(28px); filter: brightness(1.4); }
+      100% { transform: skewX(-14deg) translateX(0); filter: brightness(1); }
+    }
+
+    /* 2. ตัวเลขคะแนนสไลด์ขึ้น */
+    .score-slide-up {
+      animation: scoreUp 0.35s ease-out;
+    }
+
+    @keyframes scoreUp {
+      0% { transform: skewX(14deg) translateY(100%); opacity: 0; }
+      100% { transform: skewX(14deg) translateY(0); opacity: 1; }
+    }
+
+    /* แผงปุ่มควบคุม (Control Panel) */
+    .controls {
+      margin-top: 25px;
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      padding: 10px 18px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .btn-home { background: #0055d4; }
+    .btn-away { background: #e60026; }
+    .btn-reset { background: #444; }
+    button:active { transform: scale(0.95); }
+  </style>
+</head>
+<body>
+
+  <!-- ส่วนแสดงผลสกอร์บอร์ด (จะแสดงบนหน้าไลฟ์) -->
+  <div class="scoreboard-container">
+    <div id="bar-home" class="team-bar home">
+      <div class="team-name">THA</div>
+      <div class="score-box">
+        <span id="score-home" class="score-text">0</span>
+      </div>
+    </div>
+
+    <div id="bar-away" class="team-bar away">
+      <div class="team-name">JPN</div>
+      <div class="score-box">
+        <span id="score-away" class="score-text">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ส่วนปุ่มกดควบคุม (ซ่อนในไลฟ์ หรือเปิดกดจากหน้าต่างควบคุม) -->
+  <div class="controls">
+    <button class="btn-home" onclick="addScore('home')">+1 THA</button>
+    <button class="btn-away" onclick="addScore('away')">+1 JPN</button>
+    <button class="btn-reset" onclick="resetScores()">RESET</button>
+  </div>
+
+  <script>
+    let scores = { home: 0, away: 0 };
+
+    function addScore(team) {
+      scores[team]++;
+      
+      const barElem = document.getElementById(`bar-${team}`);
+      const scoreElem = document.getElementById(`score-${team}`);
+
+      // เปลี่ยนตัวเลข
+      scoreElem.innerText = scores[team];
+
+      // รีเซ็ตคลาสอนิเมชันเพื่อให้เล่นใหม่ทุกครั้งที่กด
+      barElem.classList.remove('slide-thrust');
+      scoreElem.classList.remove('score-slide-up');
+      
+      void barElem.offsetWidth; // Trigger reflow
+
+      // ใส่คลาสกระตุ้นอนิเมชันสไลด์
+      barElem.classList.add('slide-thrust');
+      scoreElem.classList.add('score-slide-up');
+    }
+
+    function resetScores() {
+      scores.home = 0;
+      scores.away = 0;
+      document.getElementById('score-home').innerText = 0;
+      document.getElementById('score-away').innerText = 0;
+    }
+  </script>
+</body>
+</html>
