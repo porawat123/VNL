@@ -2,173 +2,319 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>VNL Live Scoreboard</title>
+  <title>VNL Folded Scoreboard</title>
   <style>
+    /* --- Base Styles --- */
     body {
       margin: 0;
-      padding: 20px;
-      background-color: transparent;
-      font-family: "Impact", "Arial Black", sans-serif;
-      user-select: none;
-    }
-
-    /* กล่องสกอร์บอร์ดรวม */
-    .scoreboard-container {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      width: 380px;
-    }
-
-    /* แถบทีมสไตล์ VNL (เอียง Skew) */
-    .team-bar {
-      display: flex;
-      align-items: center;
-      height: 48px;
-      background: #11141a;
-      color: #ffffff;
-      transform: skewX(-14deg);
-      border-radius: 4px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      position: relative;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    /* แถบสีประจำทีม */
-    .team-bar.home { border-left: 8px solid #0055d4; }
-    .team-bar.away { border-left: 8px solid #e60026; }
-
-    /* ป้ายชื่อทีม */
-    .team-name {
-      font-size: 24px;
-      padding-left: 15px;
-      letter-spacing: 1.5px;
-      flex-grow: 1;
-      transform: skewX(14deg); /* ปรับข้อความให้ตรง */
-    }
-
-    /* กล่องคะแนน */
-    .score-box {
-      width: 60px;
-      height: 100%;
-      background: #1e232d;
+      padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 28px;
-      color: #ffd700;
-      border-left: 2px solid rgba(255, 255, 255, 0.1);
-      position: relative;
-      overflow: hidden;
+      height: 100vh;
+      background-color: transparent; /* สำคัญสำหรับ PRISM */
+      font-family: 'Montserrat', sans-serif; /* แนะนำ Montserrat หรือ Arial */
+      user-select: none;
     }
 
-    .score-text {
-      transform: skewX(14deg); /* ปรับตัวเลขให้ตรง */
+    /* --- Scoreboard Container --- */
+    #scoreboard-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 450px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    /* --- Team Bar Styles --- */
+    .team-bar {
+      display: flex;
+      align-items: center;
+      height: 60px;
+      background: linear-gradient(135deg, #120e2e 0%, #1e183d 100%);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: transform 0.3s ease; /* สำหรับเอฟเฟกต์ขยับตัว */
+    }
+
+    /* สีแถบทีม */
+    .team-bar.home { border-left: 8px solid #0056D4; } /* Blue for THA style */
+    .team-bar.away { border-left: 8px solid #E60026; } /* Red for BRA style */
+
+    /* --- Team Name with Folded Effect (3D) --- */
+    .folded-container {
+      perspective: 800px; /* สร้างมิติ 3D */
+      flex: 1;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .folded-text {
+      font-size: 36px;
+      font-weight: 800;
+      color: white;
+      text-transform: uppercase;
+      transform-style: preserve-3d;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      position: relative;
       display: inline-block;
     }
 
-    /* --- Keyframes สำหรับ Animation สไลด์ --- */
-
-    /* 1. แถบทีมสไลด์พุ่ง */
-    .slide-thrust {
-      animation: barThrust 0.45s ease-out;
+    /* เอฟเฟกต์พับ: หน้าครึ่งซ้าย */
+    .folded-text::before {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: rgba(255, 255, 255, 0.95);
+      transform-origin: 50% 50%;
+      transform: rotateY(-35deg) skewY(-5deg); /* พับออกด้านซ้าย */
+      clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+      z-index: 1;
     }
 
-    @keyframes barThrust {
-      0% { transform: skewX(-14deg) translateX(0); }
-      40% { transform: skewX(-14deg) translateX(28px); filter: brightness(1.4); }
-      100% { transform: skewX(-14deg) translateX(0); filter: brightness(1); }
+    /* เอฟเฟกต์พับ: หน้าครึ่งขวา */
+    .folded-text::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: rgba(255, 255, 255, 0.95);
+      transform-origin: 50% 50%;
+      transform: rotateY(35deg) skewY(5deg); /* พับออกด้านขวา */
+      clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+      z-index: 2;
     }
 
-    /* 2. ตัวเลขคะแนนสไลด์ขึ้น */
-    .score-slide-up {
-      animation: scoreUp 0.35s ease-out;
+    /* เงาตกกระทบตรงกลางรอยพับ */
+    .folded-text .shadow {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      filter: blur(2px);
+      z-index: 3;
     }
 
-    @keyframes scoreUp {
-      0% { transform: skewX(14deg) translateY(100%); opacity: 0; }
-      100% { transform: skewX(14deg) translateY(0); opacity: 1; }
-    }
-
-    /* แผงปุ่มควบคุม (Control Panel) */
-    .controls {
-      margin-top: 25px;
+    /* --- Set Count Styles --- */
+    .set-box {
+      width: 80px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.05);
       display: flex;
-      gap: 12px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-left: 2px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+
+    .sets-label {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .set-text {
+      font-size: 32px;
+      font-weight: 700;
+      color: #FFD700; /* Gold color for Sets */
+    }
+
+    /* --- Keyframes for Animation: Pop and Shift --- */
+
+    /* 1. Pop effect for Team Names and Scores */
+    @keyframes popAndShiftHome {
+      0% { transform: scale(1) translateY(0); filter: brightness(1); }
+      30% { transform: scale(1.15) translateY(-5px) rotateZ(-1deg); filter: brightness(1.3); box-shadow: 0 10px 20px rgba(0,0,0,0.7); }
+      70% { transform: scale(1.05) translateY(-2px); filter: brightness(1.1); }
+      100% { transform: scale(1) translateY(0); filter: brightness(1); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    }
+
+    @keyframes popAndShiftAway {
+      0% { transform: scale(1) translateY(0); filter: brightness(1); }
+      30% { transform: scale(1.15) translateY(5px) rotateZ(1deg); filter: brightness(1.3); box-shadow: 0 10px 20px rgba(0,0,0,0.7); }
+      70% { transform: scale(1.05) translateY(2px); filter: brightness(1.1); }
+      100% { transform: scale(1) translateY(0); filter: brightness(1); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    }
+
+    /* คลาสกระตุ้นแอนิเมชัน */
+    .animation-pop-home { animation: popAndShiftHome 0.5s ease-out; }
+    .animation-pop-away { animation: popAndShiftAway 0.5s ease-out; }
+
+    /* --- Control Panel (Hide in Live) --- */
+    #control-panel {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(30, 24, 61, 0.95);
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .control-row { display: flex; gap: 10px; align-items: center; }
+    input[type="text"] {
+      width: 80px;
+      padding: 6px;
+      background: #111;
+      color: white;
+      border: 1px solid #444;
+      border-radius: 4px;
+      font-size: 12px;
+      text-transform: uppercase;
     }
 
     button {
-      padding: 10px 18px;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+      padding: 8px 14px;
+      background: #333;
       color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
     }
 
-    .btn-home { background: #0055d4; }
-    .btn-away { background: #e60026; }
-    .btn-reset { background: #444; }
+    button:hover { background: #555; }
     button:active { transform: scale(0.95); }
+    .btn-update { background: #FFD700; color: #1e183d; }
+    .btn-update:hover { background: #FFC000; }
+
   </style>
 </head>
 <body>
 
-  <!-- ส่วนแสดงผลสกอร์บอร์ด (จะแสดงบนหน้าไลฟ์) -->
-  <div class="scoreboard-container">
+  <!-- Scoreboard -->
+  <div id="scoreboard-container">
     <div id="bar-home" class="team-bar home">
-      <div class="team-name">THA</div>
-      <div class="score-box">
-        <span id="score-home" class="score-text">0</span>
+      <div class="folded-container">
+        <div id="folded-text-home" class="folded-text" data-text="THA">
+          <div class="shadow"></div>
+        </div>
+      </div>
+      <div class="set-box">
+        <div class="sets-label">SETS</div>
+        <div id="set-home" class="set-text">0</div>
       </div>
     </div>
 
     <div id="bar-away" class="team-bar away">
-      <div class="team-name">JPN</div>
-      <div class="score-box">
-        <span id="score-away" class="score-text">0</span>
+      <div class="folded-container">
+        <div id="folded-text-away" class="folded-text" data-text="JPN">
+          <div class="shadow"></div>
+        </div>
+      </div>
+      <div class="set-box">
+        <div class="sets-label">SETS</div>
+        <div id="set-away" class="set-text">0</div>
       </div>
     </div>
   </div>
 
-  <!-- ส่วนปุ่มกดควบคุม (ซ่อนในไลฟ์ หรือเปิดกดจากหน้าต่างควบคุม) -->
-  <div class="controls">
-    <button class="btn-home" onclick="addScore('home')">+1 THA</button>
-    <button class="btn-away" onclick="addScore('away')">+1 JPN</button>
-    <button class="btn-reset" onclick="resetScores()">RESET</button>
+  <!-- Control Panel -->
+  <div id="control-panel">
+    <div class="control-row">
+      <input type="text" id="input-home" value="THA" maxlength="3" onkeyup="checkInput()">
+      <button onclick="addSet('home')">+1 SET THA</button>
+    </div>
+    <div class="control-row">
+      <input type="text" id="input-away" value="JPN" maxlength="3" onkeyup="checkInput()">
+      <button onclick="addSet('away')">+1 SET JPN</button>
+    </div>
+    <div class="control-row">
+      <button onclick="resetScoreboard()">RESET ALL</button>
+      <button class="btn-update" onclick="updateTeamNames()">UPDATE NAMES</button>
+    </div>
   </div>
 
   <script>
-    let scores = { home: 0, away: 0 };
+    let scoreboardData = {
+      home: { name: 'THA', sets: 0 },
+      away: { name: 'JPN', sets: 0 }
+    };
 
-    function addScore(team) {
-      scores[team]++;
-      
+    function updateScoreboardView(team) {
+      const data = scoreboardData[team];
       const barElem = document.getElementById(`bar-${team}`);
-      const scoreElem = document.getElementById(`score-${team}`);
+      const foldedElem = document.getElementById(`folded-text-${team}`);
+      const setElem = document.getElementById(`set-${team}`);
 
-      // เปลี่ยนตัวเลข
-      scoreElem.innerText = scores[team];
+      // อัปเดตคะแนน
+      setElem.innerText = data.sets;
 
-      // รีเซ็ตคลาสอนิเมชันเพื่อให้เล่นใหม่ทุกครั้งที่กด
-      barElem.classList.remove('slide-thrust');
-      scoreElem.classList.remove('score-slide-up');
+      // กระตุ้นแอนิเมชันป๊อปอัพ
+      const animationClass = `animation-pop-${team}`;
+      barElem.classList.remove(animationClass);
+      foldedElem.classList.remove('score-update'); // (ไม่ได้ใช้ใน CSS นี้ แต่เก็บไว้)
       
       void barElem.offsetWidth; // Trigger reflow
 
-      // ใส่คลาสกระตุ้นอนิเมชันสไลด์
-      barElem.classList.add('slide-thrust');
-      scoreElem.classList.add('score-slide-up');
+      barElem.classList.add(animationClass);
+      
+      // ลบคลาสแอนิเมชันเมื่อเล่นจบ
+      setTimeout(() => {
+        barElem.classList.remove(animationClass);
+      }, 500);
     }
 
-    function resetScores() {
-      scores.home = 0;
-      scores.away = 0;
-      document.getElementById('score-home').innerText = 0;
-      document.getElementById('score-away').innerText = 0;
+    function addSet(team) {
+      scoreboardData[team].sets++;
+      updateScoreboardView(team);
     }
-  </script>
+
+    function updateTeamNames() {
+      const newHomeName = document.getElementById('input-home').value.trim().toUpperCase();
+      const newAwayName = document.getElementById('input-away').value.trim().toUpperCase();
+
+      if (newHomeName.length === 3 && newAwayName.length === 3) {
+        scoreboardData.home.name = newHomeName;
+        scoreboardData.away.name = newAwayName;
+
+        document.getElementById('folded-text-home').setAttribute('data-text', newHomeName);
+        document.getElementById('folded-text-away').setAttribute('data-text', newAwayName);
+        
+        // (อาจเพิ่มแอนิเมชันสไลด์สลับชื่อทีมที่นี่ได้)
+      } else {
+        alert("ขออภัยครับ ชื่อทีมต้องเป็นตัวอักษร 3 ตัวพอดี");
+      }
+    }
+
+    function resetScoreboard() {
+      scoreboardData.home.sets = 0;
+      scoreboardData.away.sets = 0;
+      updateScoreboardView('home');
+      updateScoreboardView('away');
+    }
+
+    function checkInput() {
+      const homeInput = document.getElementById('input-home');
+      const awayInput = document.getElementById('input-away');
+      homeInput.value = homeInput.value.toUpperCase();
+      awayInput.value = awayInput.value.toUpperCase();
+    }
+    
+    // ตั้งค่าเบื้องต้น
+    updateScoreboardView('home');
+    updateScoreboardView('away');
+    
+  </style>
+</head>
+<body>
 </body>
 </html>
