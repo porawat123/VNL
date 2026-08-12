@@ -85,32 +85,24 @@
       object-fit: cover;
     }
 
-    /* SERVE BALL ICON */
+    /* SERVE BALL ICON (ไม่มีเอฟเฟกต์แสงไฟ/ไม่มีแอนิเมชันกระพริบ) */
     .ball-icon {
-      width: 28px;
-      height: 28px;
+      width: 22px;
+      height: 22px;
       margin: 0 8px;
-      background: radial-gradient(circle at 35% 35%, #ffe600 0%, #ff9900 60%, #002288 100%);
+      background: #ffd600;
       border-radius: 50%;
-      border: 1.5px solid #fff;
-      box-shadow: 0 0 10px #ffe600;
+      border: 1.5px solid #ffffff;
       opacity: 0;
-      transform: scale(0.5);
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      visibility: hidden;
     }
 
     .ball-icon.active {
       opacity: 1;
-      transform: scale(1);
-      animation: pulseBall 1.5s infinite alternate;
+      visibility: visible;
     }
 
-    @keyframes pulseBall {
-      0% { filter: drop-shadow(0 0 4px #ffe600); }
-      100% { filter: drop-shadow(0 0 12px #fffa65); }
-    }
-
-    /* TEAM CODE TEXT (VNL STYLE) */
+    /* TEAM CODE TEXT */
     .team-code {
       font-size: 52px;
       font-weight: 900;
@@ -119,22 +111,10 @@
       letter-spacing: -2px;
       line-height: 1;
       text-transform: uppercase;
-      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.9), 0 0 15px rgba(255,255,255,0.4);
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.9);
       display: inline-block;
       min-width: 90px;
       text-align: center;
-      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    /* POP ANIMATION ON POINT */
-    .point-pop {
-      animation: vnlPop 0.45s ease-out;
-    }
-
-    @keyframes vnlPop {
-      0% { transform: scale(1); filter: brightness(1); }
-      40% { transform: scale(1.35) rotate(-3deg); filter: brightness(2) drop-shadow(0 0 15px #00e5ff); color: #fff899; }
-      100% { transform: scale(1) rotate(0deg); filter: brightness(1); color: #ffffff; }
     }
 
     /* SETS BOX */
@@ -162,7 +142,7 @@
       line-height: 1;
     }
 
-    /* MATCH POINTS (CENTER SCORE) */
+    /* MATCH POINTS (ปิดแสงนีออนรอบตัวเลข สะอาด ชัดเจน) */
     .score-center {
       display: flex;
       align-items: center;
@@ -181,7 +161,6 @@
       min-width: 45px;
       text-align: center;
       line-height: 1;
-      text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
 
     .score-divider {
@@ -191,7 +170,7 @@
       margin: 0 6px;
     }
 
-    /* === CONTROLLER PANEL (สำหรับคนคุม) === */
+    /* === CONTROLLER PANEL === */
     .control-panel {
       background: rgba(18, 9, 61, 0.95);
       border: 2px solid #5a38b5;
@@ -297,7 +276,7 @@
 </head>
 <body>
 
-  <!-- SCOREBOARD (ดึงขึ้นจอไลฟ์สด) -->
+  <!-- SCOREBOARD -->
   <div class="vnl-scoreboard-wrapper">
     <div class="vnl-bar">
       
@@ -416,32 +395,11 @@
       }
     }
 
-    // ฟังก์ชันเวลากดได้แต้มแล้วตัวหนังสือจะกระตุก/เด้งป๊อปอัพแบบ VNL
-    function triggerPopEffect(team) {
-      const codeElem = document.getElementById(`code-${team}`);
-      const ptsElem = document.getElementById(`pts-${team}`);
-
-      codeElem.classList.remove('point-pop');
-      ptsElem.classList.remove('point-pop');
-
-      void codeElem.offsetWidth; // Force Reflow
-
-      codeElem.classList.add('point-pop');
-      ptsElem.classList.add('point-pop');
-
-      setTimeout(() => {
-        codeElem.classList.remove('point-pop');
-        ptsElem.classList.remove('point-pop');
-      }, 500);
-    }
-
     function addPoint(team) {
       match[team].score++;
-      // เปลี่ยนลูกเสิร์ฟมาฝั่งที่ได้แต้มทันที
       match.home.serve = (team === 'home');
       match.away.serve = (team === 'away');
       render();
-      triggerPopEffect(team);
     }
 
     function minusPoint(team) {
@@ -454,7 +412,6 @@
     function addSet(team) {
       match[team].sets++;
       render();
-      triggerPopEffect(team);
     }
 
     function minusSet(team) {
@@ -482,8 +439,6 @@
       match.away.country = aCountry;
 
       render();
-      triggerPopEffect('home');
-      triggerPopEffect('away');
     }
 
     function resetPoints() {
