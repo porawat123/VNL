@@ -39,7 +39,7 @@
       border-bottom: 4px solid #00e5ff;
       border-radius: 4px;
       height: 70px;
-      overflow: visible; /* ยอมให้ตัวหนังสือยืดทะลุขอบออกไปได้ */
+      overflow: visible;
       position: relative;
     }
 
@@ -98,7 +98,6 @@
       visibility: visible;
     }
 
-    /* ตัวอักษรชื่อทีม */
     .team-code {
       font-family: 'Oswald', sans-serif;
       font-size: 52px;
@@ -112,19 +111,19 @@
       display: inline-block;
       min-width: 90px;
       text-align: center;
-      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.25s ease-out;
       z-index: 10;
       position: relative;
     }
 
-    /* ฝั่งซ้าย (THA): ฝั่งซ้ายใหญ่ ทะลุขอบบน-ล่าง */
+    /* ฝั่งซ้าย (HOME): ขอบซ้ายขยายสูงขึ้น */
     .team-left .team-code.point-anim {
-      transform: perspective(250px) rotateY(26deg) scaleY(1.45) scaleX(1.1) !important;
+      transform: skewY(12deg) scaleY(1.45) scaleX(1.1) !important;
     }
 
-    /* ฝั่งขวา (BRA): ฝั่งขวาใหญ่ ทะลุขอบบน-ล่าง */
+    /* ฝั่งขวา (AWAY): ขอบขวาขยายสูงขึ้น */
     .team-right .team-code.point-anim {
-      transform: perspective(250px) rotateY(-26deg) scaleY(1.45) scaleX(1.1) !important;
+      transform: skewY(-12deg) scaleY(1.45) scaleX(1.1) !important;
     }
 
     .sets-box {
@@ -367,7 +366,7 @@
     let match = {
       home: { name: 'THA', country: 'th', score: 21, sets: 0, serve: true },
       away: { name: 'BRA', country: 'br', score: 9, sets: 0, serve: false },
-      lastScored: 'home' // ให้ THA ยืดเริ่มต้นตามภาพแรก
+      lastScored: 'home'
     };
 
     function render() {
