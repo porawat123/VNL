@@ -25,7 +25,6 @@
       overflow-x: hidden;
     }
 
-    /* === VNL MAIN BAR CONTAINER === */
     .vnl-scoreboard-wrapper {
       filter: drop-shadow(0 10px 20px rgba(0,0,0,0.6));
       transform: scale(1.1);
@@ -44,7 +43,6 @@
       position: relative;
     }
 
-    /* TEAM SECTION */
     .team-section {
       display: flex;
       align-items: center;
@@ -52,20 +50,17 @@
       position: relative;
     }
 
-    /* THAILAND SIDE (LEFT) */
     .team-left {
       padding-left: 10px;
       padding-right: 15px;
     }
 
-    /* BRAZIL/AWAY SIDE (RIGHT) */
     .team-right {
       padding-left: 15px;
       padding-right: 10px;
       flex-direction: row-reverse;
     }
 
-    /* FLAG */
     .flag-box {
       width: 48px;
       height: 34px;
@@ -85,7 +80,6 @@
       object-fit: cover;
     }
 
-    /* SERVE BALL ICON */
     .ball-icon {
       width: 22px;
       height: 22px;
@@ -102,7 +96,6 @@
       visibility: visible;
     }
 
-    /* TEAM CODE TEXT (Perspective Form 3D) */
     .team-code {
       font-family: 'Oswald', sans-serif;
       font-size: 50px;
@@ -120,17 +113,14 @@
       transition: transform 0.2s ease-out;
     }
 
-    /* เอียง Perspective ฝั่งซ้าย (บิดลึกเข้าหาศูนย์กลาง) */
     .team-left .team-code {
       transform: perspective(400px) rotateY(20deg) rotateX(5deg) skewY(-2deg);
     }
 
-    /* เอียง Perspective ฝั่งขวา (บิดลึกเข้าหาศูนย์กลาง) */
     .team-right .team-code {
       transform: perspective(400px) rotateY(-20deg) rotateX(5deg) skewY(2deg);
     }
 
-    /* SETS BOX */
     .sets-box {
       display: flex;
       flex-direction: column;
@@ -154,7 +144,6 @@
       line-height: 1;
     }
 
-    /* MATCH POINTS */
     .score-center {
       display: flex;
       align-items: center;
@@ -181,7 +170,6 @@
       margin: 0 6px;
     }
 
-    /* === CONTROLLER PANEL === */
     .control-panel {
       background: rgba(18, 9, 61, 0.95);
       border: 2px solid #5a38b5;
@@ -287,11 +275,9 @@
 </head>
 <body>
 
-  <!-- SCOREBOARD -->
   <div class="vnl-scoreboard-wrapper">
     <div class="vnl-bar">
       
-      <!-- HOME TEAM -->
       <div class="team-section team-left">
         <div class="flag-box">
           <img id="flag-home" src="https://flagcdn.com/w80/th.png" alt="THA">
@@ -304,14 +290,12 @@
         </div>
       </div>
 
-      <!-- CENTER SCORE POINTS -->
       <div class="score-center">
         <div id="pts-home" class="current-score">0</div>
         <div class="score-divider">:</div>
         <div id="pts-away" class="current-score">0</div>
       </div>
 
-      <!-- AWAY TEAM -->
       <div class="team-section team-right">
         <div class="flag-box">
           <img id="flag-away" src="https://flagcdn.com/w80/br.png" alt="BRA">
@@ -327,10 +311,8 @@
     </div>
   </div>
 
-  <!-- CONTROL PANEL -->
   <div class="control-panel">
     <div class="panel-grid">
-      <!-- Left Team Controls -->
       <div class="team-card">
         <h3>ทีมฝั่งซ้าย (HOME)</h3>
         <div class="input-row">
@@ -348,7 +330,6 @@
         </div>
       </div>
 
-      <!-- Right Team Controls -->
       <div class="team-card">
         <h3>ทีมฝั่งขวา (AWAY)</h3>
         <div class="input-row">
@@ -381,19 +362,16 @@
     };
 
     function render() {
-      // Name & Flags
       document.getElementById('code-home').innerText = match.home.name;
       document.getElementById('code-away').innerText = match.away.name;
       document.getElementById('flag-home').src = `https://flagcdn.com/w80/${match.home.country.toLowerCase()}.png`;
       document.getElementById('flag-away').src = `https://flagcdn.com/w80/${match.away.country.toLowerCase()}.png`;
 
-      // Scores & Sets
       document.getElementById('pts-home').innerText = match.home.score;
       document.getElementById('pts-away').innerText = match.away.score;
       document.getElementById('sets-home').innerText = match.home.sets;
       document.getElementById('sets-away').innerText = match.away.sets;
 
-      // Serve Ball Indicator
       if (match.home.serve) {
         document.getElementById('ball-home').classList.add('active');
         document.getElementById('ball-away').classList.remove('active');
@@ -466,7 +444,6 @@
       render();
     }
 
-    // เริ่มต้นแสดงผล
     render();
   </script>
 </body>
