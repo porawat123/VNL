@@ -85,7 +85,7 @@
       object-fit: cover;
     }
 
-    /* SERVE BALL ICON (ไม่มีเอฟเฟกต์แสงไฟ/ไม่มีแอนิเมชันกระพริบ) */
+    /* SERVE BALL ICON */
     .ball-icon {
       width: 22px;
       height: 22px;
@@ -102,7 +102,7 @@
       visibility: visible;
     }
 
-    /* TEAM CODE TEXT (ใช้ Oswald 700 + 3D Perspective Form) */
+    /* TEAM CODE TEXT (Perspective Form 3D) */
     .team-code {
       font-family: 'Oswald', sans-serif;
       font-size: 50px;
@@ -120,12 +120,12 @@
       transition: transform 0.2s ease-out;
     }
 
-    /* ปรับเอียง Perspective ฝั่งซ้าย (เข้าหาศูนย์กลาง) */
+    /* เอียง Perspective ฝั่งซ้าย (บิดลึกเข้าหาศูนย์กลาง) */
     .team-left .team-code {
       transform: perspective(400px) rotateY(20deg) rotateX(5deg) skewY(-2deg);
     }
 
-    /* ปรับเอียง Perspective ฝั่งขวา (เข้าหาศูนย์กลาง) */
+    /* เอียง Perspective ฝั่งขวา (บิดลึกเข้าหาศูนย์กลาง) */
     .team-right .team-code {
       transform: perspective(400px) rotateY(-20deg) rotateX(5deg) skewY(2deg);
     }
