@@ -39,7 +39,7 @@
       border-bottom: 4px solid #00e5ff;
       border-radius: 4px;
       height: 70px;
-      overflow: visible;
+      overflow: visible; /* ยอมให้ตัวอักษรยืดทะลุขอบ */
       position: relative;
     }
 
@@ -98,6 +98,7 @@
       visibility: visible;
     }
 
+    /* ตัวอักษรชื่อทีมปกติ */
     .team-code {
       font-family: 'Oswald', sans-serif;
       font-size: 52px;
@@ -116,12 +117,12 @@
       position: relative;
     }
 
-    /* ฝั่งซ้าย (HOME): ขอบซ้ายขยายสูงขึ้น */
+    /* ฝั่งซ้าย (HOME): skewY(12deg) */
     .team-left .team-code.point-anim {
       transform: skewY(12deg) scaleY(1.45) scaleX(1.1) !important;
     }
 
-    /* ฝั่งขวา (AWAY): ขอบขวาขยายสูงขึ้น */
+    /* ฝั่งขวา (AWAY): skewY(-12deg) */
     .team-right .team-code.point-anim {
       transform: skewY(-12deg) scaleY(1.45) scaleX(1.1) !important;
     }
