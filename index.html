@@ -114,14 +114,14 @@
       transform: perspective(400px) rotateY(0deg) scale(1);
     }
 
-    /* ฝั่งซ้ายบิดเอียงขวาเข้าหาตรงกลาง + ขยายขนาด (ไม่มีเปลี่ยนสี) */
+    /* ทีมซ้าย (HOME): ยืดบิดเอียงออกไปทางซ้าย */
     .team-left .team-code.point-anim {
-      transform: perspective(400px) rotateY(25deg) scale(1.15);
+      transform: perspective(400px) rotateY(-25deg) scale(1.15) !important;
     }
 
-    /* ฝั่งขวาบิดเอียงซ้ายเข้าหาตรงกลาง + ขยายขนาด (ไม่มีเปลี่ยนสี) */
+    /* ทีมขวา (AWAY): ยืดบิดเอียงออกไปทางขวา */
     .team-right .team-code.point-anim {
-      transform: perspective(400px) rotateY(-25deg) scale(1.15);
+      transform: perspective(400px) rotateY(25deg) scale(1.15) !important;
     }
 
     .sets-box {
@@ -362,7 +362,7 @@
     let match = {
       home: { name: 'THA', country: 'th', score: 0, sets: 0, serve: true },
       away: { name: 'BRA', country: 'br', score: 0, sets: 0, serve: false },
-      lastScored: null // เก็บว่าฝั่งไหนได้แต้มล่าสุด
+      lastScored: null
     };
 
     function render() {
@@ -376,7 +376,7 @@
       document.getElementById('sets-home').innerText = match.home.sets;
       document.getElementById('sets-away').innerText = match.away.sets;
 
-      // แสดงสถานะลูกเสิร์ฟ
+      // แสดงลูกเสิร์ฟ
       if (match.home.serve) {
         document.getElementById('ball-home').classList.add('active');
         document.getElementById('ball-away').classList.remove('active');
@@ -388,7 +388,7 @@
         document.getElementById('ball-away').classList.remove('active');
       }
 
-      // แสดงการยืดบิดค้างไว้เฉพาะฝั่งที่ได้แต้มล่าสุด
+      // แสดงการยืดค้างตามฝั่งที่ได้แต้มล่าสุด
       const codeHome = document.getElementById('code-home');
       const codeAway = document.getElementById('code-away');
 
@@ -408,7 +408,7 @@
       match[team].score++;
       match.home.serve = (team === 'home');
       match.away.serve = (team === 'away');
-      match.lastScored = team; // บันทึกว่าฝั่งนี้ได้แต้มล่าสุด (ยืดบิดค้างไว้)
+      match.lastScored = team; // ล็อกให้ยืดค้างไว้ตลอดจนกว่าอีกฝั่งจะทำแต้ม
       render();
     }
 
@@ -454,7 +454,7 @@
     function resetPoints() {
       match.home.score = 0;
       match.away.score = 0;
-      match.lastScored = null; // คืนค่าตัวหนังสือตั้งตรงทั้งคู่
+      match.lastScored = null;
       render();
     }
 
@@ -463,7 +463,7 @@
       match.away.score = 0;
       match.home.sets = 0;
       match.away.sets = 0;
-      match.lastScored = null; // คืนค่าตัวหนังสือตั้งตรงทั้งคู่
+      match.lastScored = null;
       render();
     }
 
