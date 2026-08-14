@@ -110,18 +110,18 @@
       min-width: 90px;
       text-align: center;
       transform-style: preserve-3d;
-      transition: transform 0.3s ease-out;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       transform: perspective(400px) rotateY(0deg) scale(1);
     }
 
-    /* ทีมซ้าย (HOME): ยืดบิดเอียงออกไปทางซ้าย */
+    /* ทีมซ้าย (HOME): ยืดใหญ่ขึ้น (scale 1.25) + ปรับทิศหมุนเป็น 38deg */
     .team-left .team-code.point-anim {
-      transform: perspective(400px) rotateY(-25deg) scale(1.15) !important;
+      transform: perspective(400px) rotateY(38deg) scale(1.25) !important;
     }
 
-    /* ทีมขวา (AWAY): ยืดบิดเอียงออกไปทางขวา */
+    /* ทีมขวา (AWAY): ยืดใหญ่ขึ้น (scale 1.25) + ปรับทิศหมุนเป็น -38deg */
     .team-right .team-code.point-anim {
-      transform: perspective(400px) rotateY(25deg) scale(1.15) !important;
+      transform: perspective(400px) rotateY(-38deg) scale(1.25) !important;
     }
 
     .sets-box {
@@ -376,7 +376,6 @@
       document.getElementById('sets-home').innerText = match.home.sets;
       document.getElementById('sets-away').innerText = match.away.sets;
 
-      // แสดงลูกเสิร์ฟ
       if (match.home.serve) {
         document.getElementById('ball-home').classList.add('active');
         document.getElementById('ball-away').classList.remove('active');
@@ -388,7 +387,6 @@
         document.getElementById('ball-away').classList.remove('active');
       }
 
-      // แสดงการยืดค้างตามฝั่งที่ได้แต้มล่าสุด
       const codeHome = document.getElementById('code-home');
       const codeAway = document.getElementById('code-away');
 
@@ -408,7 +406,7 @@
       match[team].score++;
       match.home.serve = (team === 'home');
       match.away.serve = (team === 'away');
-      match.lastScored = team; // ล็อกให้ยืดค้างไว้ตลอดจนกว่าอีกฝั่งจะทำแต้ม
+      match.lastScored = team;
       render();
     }
 
