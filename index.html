@@ -96,7 +96,6 @@
       visibility: visible;
     }
 
-    /* สภาวะปกติ: ตัวหนังสือตรงปรกติ */
     .team-code {
       font-family: 'Oswald', sans-serif;
       font-size: 50px;
@@ -115,14 +114,11 @@
       transform: perspective(400px) rotateY(0deg) scale(1);
     }
 
-    /* === ANIMATION ตอนได้คะแนน === */
-    /* ฝั่งซ้าย: ยืดขอบขวาเข้าหาตรงกลาง */
     .team-left .team-code.point-anim {
       transform: perspective(400px) rotateY(-25deg) scale(1.15);
-      color: #00e5ff; /* เปลี่ยนสีแวบหนึ่งตอนได้แต้ม */
+      color: #00e5ff;
     }
 
-    /* ฝั่งขวา: ยืดขอบซ้าย (ทั้งบนและล่าง) เข้าหาตรงกลาง */
     .team-right .team-code.point-anim {
       transform: perspective(400px) rotateY(25deg) scale(1.15);
       color: #00e5ff;
@@ -391,18 +387,15 @@
       }
     }
 
-    // ฟังก์ชันเพิ่มแต้ม + เล่นเอฟเฟกต์ยืดเอียง 3D
     function addPoint(team) {
       match[team].score++;
       match.home.serve = (team === 'home');
       match.away.serve = (team === 'away');
       render();
 
-      // สั่งให้ข้อความบิดเอียง 3D
       const codeElem = document.getElementById(team === 'home' ? 'code-home' : 'code-away');
       codeElem.classList.add('point-anim');
 
-      // ลบคลาสออกหลังจาก 0.5 วินาที เพื่อคืนรูปทรงปกติ
       setTimeout(() => {
         codeElem.classList.remove('point-anim');
       }, 500);
