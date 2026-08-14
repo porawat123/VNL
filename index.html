@@ -114,14 +114,14 @@
       transform: perspective(400px) rotateY(0deg) scale(1);
     }
 
-    /* ทีมซ้าย (HOME): ยืดใหญ่ขึ้น (scale 1.25) + ปรับทิศหมุนเป็น 38deg */
+    /* ทีมซ้าย (HOME): ยืดบิดเอียงออกไปทางซ้าย (-38deg) */
     .team-left .team-code.point-anim {
-      transform: perspective(400px) rotateY(38deg) scale(1.25) !important;
+      transform: perspective(400px) rotateY(-38deg) scale(1.25) !important;
     }
 
-    /* ทีมขวา (AWAY): ยืดใหญ่ขึ้น (scale 1.25) + ปรับทิศหมุนเป็น -38deg */
+    /* ทีมขวา (AWAY): ยืดบิดเอียงออกไปทางขวา (38deg) */
     .team-right .team-code.point-anim {
-      transform: perspective(400px) rotateY(-38deg) scale(1.25) !important;
+      transform: perspective(400px) rotateY(38deg) scale(1.25) !important;
     }
 
     .sets-box {
@@ -469,4 +469,3 @@
   </script>
 </body>
 </html>
-
