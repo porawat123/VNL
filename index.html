@@ -39,7 +39,7 @@
       border-bottom: 4px solid #00e5ff;
       border-radius: 4px;
       height: 70px;
-      overflow: hidden; /* ล็อคไม่ให้ยืดล้นออกนอกแผง */
+      overflow: visible;
       position: relative;
     }
 
@@ -101,40 +101,38 @@
     /* Container ชื่อทีม */
     .team-code {
       display: flex;
-      align-items: flex-end; /* ยึดฐานตัวอักษรไว้ที่ขอบล่าง */
+      align-items: center;
       justify-content: center;
-      min-width: 90px;
+      min-width: 100px;
       height: 70px;
-      padding-bottom: 4px;
       z-index: 10;
       position: relative;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    /* สไตล์ตัวอักษรปกติ */
     .char-item {
       font-family: 'Oswald', sans-serif;
-      font-size: 50px;
+      font-size: 64px;
       font-weight: 700;
       font-style: italic;
       color: #ffffff;
       text-shadow: 0 4px 10px rgba(0, 0, 0, 0.9);
       display: inline-block;
-      line-height: 0.85;
-      transform-origin: bottom center; /* ดันขึ้นข้างบนอย่างเดียว ฐานนิ่ง */
-      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      line-height: 1;
     }
 
-    /* --- REAL PERSPECTIVE EFFECT (คางหมูแท้ ไม่ล้นขอบ) --- */
-    
-    /* ฝั่งซ้าย (HOME): ตัวแรก (T) สูงชนขอบบนพอดี -> ตัวสุดท้าย (A) ปานกลาง */
-    .team-left .point-anim .char-0 { transform: scaleY(1.42) scaleX(1.1); }
-    .team-left .point-anim .char-1 { transform: scaleY(1.22) scaleX(1.05); }
-    .team-left .point-anim .char-2 { transform: scaleY(1.02) scaleX(1.0); }
+    /* 3D PERSPECTIVE REAL EFFECT */
+    .team-left .team-code.point-anim {
+      transform-style: preserve-3d;
+      transform-origin: center center;
+      transform: perspective(150px) rotateY(-32deg) scaleX(1.15) scaleY(1.1);
+    }
 
-    /* ฝั่งขวา (AWAY): ตัวแรก (B) ปานกลาง -> ตัวสุดท้าย (A) สูงชนขอบบนพอดี */
-    .team-right .point-anim .char-0 { transform: scaleY(1.02) scaleX(1.0); }
-    .team-right .point-anim .char-1 { transform: scaleY(1.22) scaleX(1.05); }
-    .team-right .point-anim .char-2 { transform: scaleY(1.42) scaleX(1.1); }
+    .team-right .team-code.point-anim {
+      transform-style: preserve-3d;
+      transform-origin: center center;
+      transform: perspective(150px) rotateY(32deg) scaleX(1.15) scaleY(1.1);
+    }
 
     .sets-box {
       display: flex;
@@ -383,9 +381,9 @@
       const container = document.getElementById(elementId);
       container.innerHTML = '';
       const chars = text.split('');
-      chars.forEach((char, index) => {
+      chars.forEach((char) => {
         const span = document.createElement('span');
-        span.className = `char-item char-${index}`;
+        span.className = 'char-item';
         span.innerText = char;
         container.appendChild(span);
       });
