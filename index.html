@@ -112,21 +112,20 @@
       display: inline-block;
       min-width: 90px;
       text-align: center;
-      transition: transform 0.25s ease-out;
+      transition: transform 0.25s ease-out, filter 0.25s ease-out;
       z-index: 10;
       position: relative;
-      transform-style: preserve-3d;
     }
 
-    /* ฝั่งซ้าย (HOME): ตัวแรก (T) ใหญ่สุด -> ตัวท้าย (A) เล็กสุด */
+    /* ฝั่งซ้าย (HOME): ตัว T ขยายใหญ่สุด -> ตัว A บีบเล็กสุด (รูปทรงคางหมูยืดแนวตั้ง) */
     .team-left .team-code.point-anim {
-      transform: perspective(250px) rotateY(30deg) scale(1.1) !important;
+      transform: matrix(1.15, 0, 0, 1.45, 0, 0) perspective(200px) rotateY(-25deg) !important;
       transform-origin: left center;
     }
 
-    /* ฝั่งขวา (AWAY): ตัวแรก (B) เล็กสุด -> ตัวท้าย (A) ใหญ่สุด */
+    /* ฝั่งขวา (AWAY): ตัว B บีบเล็กสุด -> ตัว A ขยายใหญ่สุด */
     .team-right .team-code.point-anim {
-      transform: perspective(250px) rotateY(-30deg) scale(1.1) !important;
+      transform: matrix(1.15, 0, 0, 1.45, 0, 0) perspective(200px) rotateY(25deg) !important;
       transform-origin: right center;
     }
 
