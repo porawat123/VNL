@@ -39,7 +39,7 @@
       border-bottom: 4px solid #00e5ff;
       border-radius: 4px;
       height: 70px;
-      overflow: visible;
+      overflow: hidden; /* ล็อคไม่ให้ยืดล้นออกนอกแผง */
       position: relative;
     }
 
@@ -98,33 +98,43 @@
       visibility: visible;
     }
 
-    /* --- SVG Container สำหรับยืดตัวอักษร 100% ชนขอบบน-ล่าง --- */
-    .svg-team-code {
-      width: 100px;
-      height: 70px; /* ความสูงเท่ากับความสูงแถบ vnl-bar (70px) ชนขอบพอดี */
+    /* Container ชื่อทีม */
+    .team-code {
+      display: flex;
+      align-items: flex-end; /* ยึดฐานตัวอักษรไว้ที่ขอบล่าง */
+      justify-content: center;
+      min-width: 90px;
+      height: 70px;
+      padding-bottom: 4px;
       z-index: 10;
-      overflow: visible;
+      position: relative;
+    }
+
+    /* สไตล์ตัวอักษรปกติ */
+    .char-item {
+      font-family: 'Oswald', sans-serif;
+      font-size: 50px;
+      font-weight: 700;
+      font-style: italic;
+      color: #ffffff;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.9);
+      display: inline-block;
+      line-height: 0.85;
+      transform-origin: bottom center; /* ดันขึ้นข้างบนอย่างเดียว ฐานนิ่ง */
       transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .svg-team-code text {
-      font-family: 'Oswald', sans-serif;
-      font-weight: 700;
-      font-style: italic;
-      fill: #ffffff;
-      filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.8));
-    }
+    /* --- REAL PERSPECTIVE EFFECT (คางหมูแท้ ไม่ล้นขอบ) --- */
+    
+    /* ฝั่งซ้าย (HOME): ตัวแรก (T) สูงชนขอบบนพอดี -> ตัวสุดท้าย (A) ปานกลาง */
+    .team-left .point-anim .char-0 { transform: scaleY(1.42) scaleX(1.1); }
+    .team-left .point-anim .char-1 { transform: scaleY(1.22) scaleX(1.05); }
+    .team-left .point-anim .char-2 { transform: scaleY(1.02) scaleX(1.0); }
 
-    /* เอฟเฟกต์ยืดพุ่งทะลุขอบเมื่อได้แต้ม */
-    .team-left .point-anim {
-      transform-origin: right center;
-      transform: scaleY(1.45) scaleX(1.1) skewY(-8deg); /* ยืดพุ่งข้ามขอบบน-ล่าง พร้อมเฉียงมิติ VNL */
-    }
-
-    .team-right .point-anim {
-      transform-origin: left center;
-      transform: scaleY(1.45) scaleX(1.1) skewY(8deg);
-    }
+    /* ฝั่งขวา (AWAY): ตัวแรก (B) ปานกลาง -> ตัวสุดท้าย (A) สูงชนขอบบนพอดี */
+    .team-right .point-anim .char-0 { transform: scaleY(1.02) scaleX(1.0); }
+    .team-right .point-anim .char-1 { transform: scaleY(1.22) scaleX(1.05); }
+    .team-right .point-anim .char-2 { transform: scaleY(1.42) scaleX(1.1); }
 
     .sets-box {
       display: flex;
@@ -290,12 +300,7 @@
           <img id="flag-home" src="https://flagcdn.com/w80/th.png" alt="THA">
         </div>
         <div id="ball-home" class="ball-icon active"></div>
-
-        <!-- ตัวอักษรฝั่ง HOME ใช้ SVG สั่งยืดเต็มขอบ 100% -->
-        <svg id="code-home" class="svg-team-code point-anim" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <text id="text-home" x="50%" y="82%" text-anchor="middle" font-size="95">THA</text>
-        </svg>
-
+        <div id="code-home" class="team-code point-anim"></div>
         <div class="sets-box">
           <span class="sets-label">SETS</span>
           <span id="sets-home" class="sets-score">0</span>
@@ -313,12 +318,7 @@
           <img id="flag-away" src="https://flagcdn.com/w80/br.png" alt="BRA">
         </div>
         <div id="ball-away" class="ball-icon"></div>
-
-        <!-- ตัวอักษรฝั่ง AWAY -->
-        <svg id="code-away" class="svg-team-code" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <text id="text-away" x="50%" y="82%" text-anchor="middle" font-size="95">BRA</text>
-        </svg>
-
+        <div id="code-away" class="team-code"></div>
         <div class="sets-box">
           <span class="sets-label">SETS</span>
           <span id="sets-away" class="sets-score">0</span>
@@ -379,9 +379,21 @@
       lastScored: 'home'
     };
 
+    function generateStyledText(elementId, text) {
+      const container = document.getElementById(elementId);
+      container.innerHTML = '';
+      const chars = text.split('');
+      chars.forEach((char, index) => {
+        const span = document.createElement('span');
+        span.className = `char-item char-${index}`;
+        span.innerText = char;
+        container.appendChild(span);
+      });
+    }
+
     function render() {
-      document.getElementById('text-home').textContent = match.home.name;
-      document.getElementById('text-away').textContent = match.away.name;
+      generateStyledText('code-home', match.home.name);
+      generateStyledText('code-away', match.away.name);
 
       document.getElementById('flag-home').src = `https://flagcdn.com/w80/${match.home.country.toLowerCase()}.png`;
       document.getElementById('flag-away').src = `https://flagcdn.com/w80/${match.away.country.toLowerCase()}.png`;
