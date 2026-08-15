@@ -39,7 +39,7 @@
       border-bottom: 4px solid #00e5ff;
       border-radius: 4px;
       height: 70px;
-      overflow: hidden; /* ป้องกันไม่ให้ส่วนประกอบล้นออกนอกแผงหลัก */
+      overflow: hidden;
       position: relative;
     }
 
@@ -103,17 +103,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 90px;
+      min-width: 95px;
       height: 70px;
       z-index: 10;
       position: relative;
-      transition: transform 0.25s ease-out;
+      transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    /* ตัวอักษรชื่อทีมขนาดมาตรฐาน */
+    /* ตัวอักษรปกติ: ปรับเป็น 48px เพื่อให้ขนาดพอดีสวย ไม่เล็กและไม่ใหญ่เกินไป */
     .char-item {
       font-family: 'Oswald', sans-serif;
-      font-size: 40px; /* ลดขนาดจาก 64px ให้พอดีแผง ไม่แน่นเกินไป */
+      font-size: 48px;
       font-weight: 700;
       font-style: italic;
       color: #ffffff;
@@ -122,20 +122,23 @@
       line-height: 1;
     }
 
-    /* --- PERSPECTIVE 3D (ตอนได้แต้ม) --- */
+    /* 
+       --- NATURAL PERSPECTIVE EFFECT (ตอนได้แต้ม) ---
+       ยึดจุดฝั่งติดสกอร์ไว้ และบิดมุม rotateY + สเกลบีบ เพื่อให้ฝั่งไกลดูแคบลงอย่างสมจริง
+    */
     
-    /* ฝั่งซ้าย (HOME): บิด 3D ให้ฝั่งติดสกอร์ใหญ่ขึ้นพุ่งชนขอบ */
+    /* ฝั่งซ้าย (HOME): ยึดขวา บิดมุมมองให้อักษรฝั่งซ้าย (ติดธง) บีบแคบและสั้นลง */
     .team-left .team-code.point-anim {
       transform-style: preserve-3d;
-      transform-origin: right center; /* ยึดแกนฝั่งติดสกอร์ */
-      transform: perspective(400px) rotateY(-22deg) scaleY(1.3) scaleX(1.05);
+      transform-origin: right center;
+      transform: perspective(350px) rotateY(-18deg) scaleX(0.95) scaleY(1.05);
     }
 
-    /* ฝั่งขวา (AWAY): บิด 3D ให้ฝั่งติดสกอร์ใหญ่ขึ้นพุ่งชนขอบ */
+    /* ฝั่งขวา (AWAY): ยึดซ้าย บิดมุมมองให้อักษรฝั่งขวา (ติดธง) บีบแคบและสั้นลง */
     .team-right .team-code.point-anim {
       transform-style: preserve-3d;
-      transform-origin: left center; /* ยึดแกนฝั่งติดสกอร์ */
-      transform: perspective(400px) rotateY(22deg) scaleY(1.3) scaleX(1.05);
+      transform-origin: left center;
+      transform: perspective(350px) rotateY(18deg) scaleX(0.95) scaleY(1.05);
     }
 
     .sets-box {
