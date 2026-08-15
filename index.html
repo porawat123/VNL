@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VNL Scoreboard Official Replica</title>
+  <title>VNL Scoreboard Pure Replica</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -21,231 +21,228 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 70px;
+      padding-top: 80px;
       color: #fff;
     }
 
-    /* --- SCOREBAR CONTAINER --- */
-    .vnl-scoreboard-wrapper {
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
-      transform: scale(1.15);
+    /* --- SCOREBOARD CONTAINER --- */
+    .vnl-container {
+      transform: scale(1.2);
       margin-bottom: 60px;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
     }
 
-    .vnl-bar {
+    .vnl-scorebug {
       display: flex;
       align-items: center;
-      background: linear-gradient(180deg, #2b0b57 0%, #150430 100%);
-      height: 52px;
+      height: 48px;
+      background: #1c0936;
       position: relative;
-      border-radius: 2px;
-      overflow: visible; /* ยอมให้ 3D Text ยื่นทะลุขอบได้ */
     }
 
-    .team-section {
+    /* --- TEAM SIDE SECTIONS --- */
+    .team-side {
       display: flex;
       align-items: center;
       height: 100%;
       position: relative;
-      overflow: visible;
     }
 
     .flag-box {
-      width: 65px;
+      width: 58px;
       height: 100%;
-      overflow: hidden;
-      position: relative;
       z-index: 2;
     }
-
     .flag-box img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .team-panel {
+    .team-info {
       display: flex;
       align-items: center;
       height: 100%;
-      padding: 0 10px;
+      background: linear-gradient(180deg, #38126b 0%, #1f0742 100%);
+      padding: 0 8px;
       position: relative;
-      background: linear-gradient(180deg, #3d1475 0%, #210947 100%);
-      overflow: visible;
     }
 
-    /* แถบไฮไลท์สีขอบล่าง */
-    .team-left .team-panel { border-bottom: 4px solid #00e5ff; }
-    .team-right .team-panel { border-bottom: 4px solid #ffffff; }
+    .team-left .team-info { border-bottom: 3.5px solid #00e5ff; }
+    .team-right .team-info { border-bottom: 3.5px solid #ffffff; }
 
     .team-right { flex-direction: row-reverse; }
 
-    /* ไอคอนลูกเสิร์ฟ */
+    /* Serving Ball */
     .ball-icon {
-      width: 24px;
-      height: 24px;
-      margin: 0 6px;
+      width: 20px;
+      height: 20px;
       background: radial-gradient(circle at 35% 35%, #fff176, #f57f17);
       border-radius: 50%;
       border: 1.5px solid #fff;
-      box-shadow: 0 0 6px rgba(0,0,0,0.6);
+      margin: 0 4px;
       display: none;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5);
       z-index: 5;
     }
     .ball-icon.active { display: block; }
 
-    /* --- 3D PERSPECTIVE TEXT CONTAINER --- */
-    .team-code-wrapper {
-      perspective: 280px; /* สร้างมิติความลึก 3D */
-      perspective-origin: center;
+    /* --- PERSPECTIVE TEXT ENGINE (USING SVG FOR EXACT RENDER) --- */
+    .team-name-box {
+      width: 75px;
+      height: 58px; /* สูงกว่า bar เพื่อให้ตัวอักษรยื่นทะลุขอบบน-ล่าง */
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 85px;
+      margin: -5px 0;
+      z-index: 20;
+    }
+
+    .team-name-svg {
+      width: 100%;
       height: 100%;
-      position: relative;
-      z-index: 100;
       overflow: visible;
     }
 
-    .team-code {
-      font-size: 42px;
+    .team-name-text {
+      font-family: 'Oswald', sans-serif;
       font-weight: 700;
-      color: #ffffff;
-      line-height: 1;
-      display: inline-block;
-      white-space: nowrap;
-      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      transform-style: preserve-3d;
-      letter-spacing: 0.5px;
+      font-size: 44px;
+      fill: #ffffff;
+      transition: transform 0.2s ease;
     }
 
-    /* 
-       --- REAL 3D PERSPECTIVE (บิดเอียงทรงคางหมูแท้ ทะลุขอบบน-ล่าง) --- 
-    */
-    
-    /* THA ได้แต้ม: ตัว T (ฝั่งซ้าย) ยื่นใหญ่ทะลุขอบ สโลปลดลงไปหาตัว A (ฝั่งขวา) */
-    .team-left .team-code.point-anim {
-      transform: rotateY(-34deg) scale(1.38) translateX(-3px);
-      text-shadow: -4px 4px 10px rgba(0,0,0,0.8);
+    /* --- REAL VNL SLANTED PERSPECTIVE EFFECT --- */
+    /* ฝั่ง THA (ซ้าย): เมื่อได้แต้ม ปลายซ้ายจะสูงพุ่งทะลุขอบ แล้วสโลปลดระดับไปฝั่งขวา */
+    .team-left .point-scored .team-name-text {
+      transform: matrix(1, -0.18, 0, 1.25, 0, 2);
     }
 
-    /* BRA ได้แต้ม: ตัว B (ฝั่งซ้าย) เล็ก สโลปใหญ่ทะลุขอบไปหาตัว A (ฝั่งขวา) */
-    .team-right .team-code.point-anim {
-      transform: rotateY(34deg) scale(1.38) translateX(3px);
-      text-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+    /* ฝั่ง BRA (ขวา): เมื่อได้แต้ม ปลายขวาจะสูงพุ่งทะลุขอบ แล้วสโลปลดระดับไปฝั่งซ้าย (เหมือนรูปที่ 1) */
+    .team-right .point-scored .team-name-text {
+      transform: matrix(1, 0.18, 0, 1.25, 0, -6);
     }
 
-    /* --- กล่อง SETS --- */
+    /* --- SETS BOX --- */
     .sets-box {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin: 0 8px;
-      z-index: 2;
+      margin: 0 6px;
     }
-    .sets-label { font-size: 9px; font-weight: 600; color: #b39ddb; line-height: 1; letter-spacing: 0.5px; }
-    .sets-score { font-size: 24px; font-weight: 700; color: #ffffff; line-height: 1; }
+    .sets-label { font-size: 8.5px; color: #b39ddb; font-weight: 700; line-height: 1; }
+    .sets-val { font-size: 22px; color: #fff; font-weight: 700; line-height: 1; }
 
-    /* --- สกอร์ตรงกลาง --- */
-    .score-center-bar {
+    /* --- SCORE CENTER --- */
+    .score-center {
       display: flex;
       align-items: center;
       background: linear-gradient(180deg, #5b138c 0%, #3a0861 100%);
       height: 100%;
-      padding: 0 14px;
-      position: relative;
-      z-index: 2;
+      padding: 0 10px;
+    }
+    .score-num { font-size: 34px; font-weight: 700; min-width: 24px; text-align: center; line-height: 1; }
+    
+    .vnl-logo {
+      font-weight: 900;
+      font-size: 18px;
+      font-style: italic;
+      color: #ff6d00;
+      margin: 0 8px;
+      letter-spacing: -1px;
     }
 
-    .current-score { font-size: 38px; font-weight: 700; color: #ffffff; min-width: 28px; text-align: center; line-height: 1; }
-    .vnl-logo-center { font-weight: 900; font-size: 20px; font-style: italic; color: #ff6d00; margin: 0 10px; letter-spacing: -1px; }
-
-    /* --- CONTROL PANEL --- */
+    /* --- CONTROLLER PANEL --- */
     .control-panel {
       background: #180c2e;
       border: 1px solid #4a148c;
-      border-radius: 10px;
-      padding: 18px;
-      width: 560px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      border-radius: 8px;
+      padding: 16px;
+      width: 520px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
     }
-    .panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-    .team-card { background: rgba(255,255,255,0.04); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); }
-    .team-card h3 { font-size: 13px; color: #80deea; margin-bottom: 8px; text-transform: uppercase; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .card { background: rgba(255,255,255,0.04); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); }
+    .card h3 { font-size: 12px; color: #80deea; margin-bottom: 6px; }
     
-    .input-group { display: flex; gap: 6px; margin-bottom: 8px; }
-    .input-field { flex: 1; }
-    .input-field label { display: block; font-size: 9px; color: #aaa; margin-bottom: 2px; }
+    .inp-group { display: flex; gap: 4px; margin-bottom: 6px; }
+    .inp-group div { flex: 1; }
+    .inp-group label { display: block; font-size: 9px; color: #aaa; }
     input[type="text"] { 
       background: #090314; 
       border: 1px solid #5c2596; 
       color: #fff; 
-      padding: 5px 8px; 
+      padding: 4px 6px; 
       font-weight: bold; 
       width: 100%; 
       text-transform: uppercase; 
-      border-radius: 4px;
-      font-size: 13px;
+      border-radius: 3px;
+      font-size: 12px;
     }
-    input[type="text"]:focus { outline: none; border-color: #00e5ff; }
 
-    .btn-row { display: flex; gap: 6px; margin-bottom: 6px; }
-    button { background: #4a148c; color: white; border: none; border-radius: 4px; padding: 7px 10px; font-weight: bold; font-size: 12px; cursor: pointer; transition: 0.15s; }
+    .btn-row { display: flex; gap: 4px; margin-bottom: 4px; }
+    button { background: #4a148c; color: white; border: none; border-radius: 3px; padding: 6px 8px; font-weight: bold; font-size: 11px; cursor: pointer; }
     button:hover { background: #6a1b9a; }
-    button:active { transform: scale(0.96); }
-    .btn-point { background: #00e5ff; color: #000; flex: 1; }
-    .btn-point:hover { background: #18ffff; }
-    .btn-serve { background: #ffc400; color: #000; }
-    .global-actions { display: flex; gap: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; }
-    .btn-reset { background: #d50000; margin-left: auto; }
+    .btn-pt { background: #00e5ff; color: #000; flex: 1; }
+    .btn-srv { background: #ffc400; color: #000; }
+    .global-bar { display: flex; gap: 6px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
+    .btn-rst { background: #d50000; margin-left: auto; }
   </style>
 </head>
 <body>
 
-  <!-- SCOREBOARD BAR -->
-  <div class="vnl-scoreboard-wrapper">
-    <div class="vnl-bar">
+  <!-- SCOREBUG -->
+  <div class="vnl-container">
+    <div class="vnl-scorebug">
       
       <!-- HOME (LEFT) -->
-      <div class="team-section team-left">
+      <div class="team-side team-left">
         <div class="flag-box">
           <img id="flag-home" src="https://flagcdn.com/w80/th.png" alt="THA">
         </div>
-        <div class="team-panel">
+        <div class="team-info">
           <div id="ball-home" class="ball-icon"></div>
-          <div class="team-code-wrapper">
-            <span id="code-home" class="team-code">THA</span>
+          
+          <!-- SVG Perspective Team Name -->
+          <div class="team-name-box" id="box-home">
+            <svg class="team-name-svg" viewBox="0 0 100 50">
+              <text x="50%" y="75%" text-anchor="middle" class="team-name-text" id="code-home">THA</text>
+            </svg>
           </div>
+
           <div class="sets-box">
             <span class="sets-label">SETS</span>
-            <span id="sets-home" class="sets-score">1</span>
+            <span id="sets-home" class="sets-val">1</span>
           </div>
         </div>
       </div>
 
       <!-- SCORE CENTER -->
-      <div class="score-center-bar">
-        <div id="pts-home" class="current-score">0</div>
-        <div class="vnl-logo-center">VNL</div>
-        <div id="pts-away" class="current-score">0</div>
+      <div class="score-center">
+        <div id="pts-home" class="score-num">0</div>
+        <div class="vnl-logo">VNL</div>
+        <div id="pts-away" class="score-num">0</div>
       </div>
 
       <!-- AWAY (RIGHT) -->
-      <div class="team-section team-right">
+      <div class="team-side team-right">
         <div class="flag-box">
           <img id="flag-away" src="https://flagcdn.com/w80/br.png" alt="BRA">
         </div>
-        <div class="team-panel">
+        <div class="team-info">
           <div id="ball-away" class="ball-icon active"></div>
-          <div class="team-code-wrapper">
-            <!-- BRA ตั้งแอนิเมชัน 3D เริ่มต้นแบบในรูปตัวอย่าง -->
-            <span id="code-away" class="team-code point-anim">BRA</span>
+          
+          <!-- SVG Perspective Team Name -->
+          <div class="team-name-box point-scored" id="box-away">
+            <svg class="team-name-svg" viewBox="0 0 100 50">
+              <text x="50%" y="75%" text-anchor="middle" class="team-name-text" id="code-away">BRA</text>
+            </svg>
           </div>
+
           <div class="sets-box">
             <span class="sets-label">SETS</span>
-            <span id="sets-away" class="sets-score">0</span>
+            <span id="sets-away" class="sets-val">0</span>
           </div>
         </div>
       </div>
@@ -253,135 +250,132 @@
     </div>
   </div>
 
-  <!-- CONTROLLER -->
+  <!-- CONTROL PANEL -->
   <div class="control-panel">
-    <div class="panel-grid">
+    <div class="grid">
       
-      <!-- HOME CONTROLS -->
-      <div class="team-card">
+      <!-- HOME CONTROL -->
+      <div class="card">
         <h3>ทีมฝั่งซ้าย (HOME)</h3>
-        <div class="input-group">
-          <div class="input-field">
-            <label>ชื่อย่อทีม (3 ตัว)</label>
-            <input type="text" id="in-home-name" value="THA" maxlength="4" oninput="updateTeams()">
+        <div class="inp-group">
+          <div>
+            <label>ชื่อทีม</label>
+            <input type="text" id="in-h-name" value="THA" maxlength="4" oninput="updateTeams()">
           </div>
-          <div class="input-field">
-            <label>รหัสธงชาติ (2 ตัว)</label>
-            <input type="text" id="in-home-flag" value="th" maxlength="2" oninput="updateTeams()">
+          <div>
+            <label>รหัสธงชาติ</label>
+            <input type="text" id="in-h-flag" value="th" maxlength="2" oninput="updateTeams()">
           </div>
         </div>
         <div class="btn-row">
-          <button class="btn-point" onclick="addPoint('home')">+1 แต้ม</button>
-          <button onclick="minusPoint('home')">-1</button>
+          <button class="btn-pt" onclick="addPt('home')">+1 แต้ม</button>
+          <button onclick="subPt('home')">-1</button>
         </div>
         <div class="btn-row">
-          <button class="btn-serve" onclick="setServe('home')">🎾 เสิร์ฟ</button>
+          <button class="btn-srv" onclick="setServe('home')">🎾 เสิร์ฟ</button>
           <button onclick="addSet('home')">+1 เซ็ต</button>
-          <button onclick="minusSet('home')">-1 เซ็ต</button>
         </div>
       </div>
 
-      <!-- AWAY CONTROLS -->
-      <div class="team-card">
+      <!-- AWAY CONTROL -->
+      <div class="card">
         <h3>ทีมฝั่งขวา (AWAY)</h3>
-        <div class="input-group">
-          <div class="input-field">
-            <label>ชื่อย่อทีม (3 ตัว)</label>
-            <input type="text" id="in-away-name" value="BRA" maxlength="4" oninput="updateTeams()">
+        <div class="inp-group">
+          <div>
+            <label>ชื่อทีม</label>
+            <input type="text" id="in-a-name" value="BRA" maxlength="4" oninput="updateTeams()">
           </div>
-          <div class="input-field">
-            <label>รหัสธงชาติ (2 ตัว)</label>
-            <input type="text" id="in-away-flag" value="br" maxlength="2" oninput="updateTeams()">
+          <div>
+            <label>รหัสธงชาติ</label>
+            <input type="text" id="in-a-flag" value="br" maxlength="2" oninput="updateTeams()">
           </div>
         </div>
         <div class="btn-row">
-          <button class="btn-point" onclick="addPoint('away')">+1 แต้ม</button>
-          <button onclick="minusPoint('away')">-1</button>
+          <button class="btn-pt" onclick="addPt('away')">+1 แต้ม</button>
+          <button onclick="subPt('away')">-1</button>
         </div>
         <div class="btn-row">
-          <button class="btn-serve" onclick="setServe('away')">🎾 เสิร์ฟ</button>
+          <button class="btn-srv" onclick="setServe('away')">🎾 เสิร์ฟ</button>
           <button onclick="addSet('away')">+1 เซ็ต</button>
-          <button onclick="minusSet('away')">-1 เซ็ต</button>
         </div>
       </div>
 
     </div>
 
-    <div class="global-actions">
-      <button onclick="resetPoints()">รีเซ็ตแต้มเซ็ตนี้</button>
-      <button class="btn-reset" onclick="resetAll()">รีเซ็ตทั้งหมด</button>
+    <div class="global-bar">
+      <button onclick="resetPts()">รีเซ็ตคะแนน</button>
+      <button class="btn-rst" onclick="resetAll()">รีเซ็ตทั้งหมด</button>
     </div>
   </div>
 
   <script>
-    let match = {
-      home: { name: 'THA', flag: 'th', score: 0, sets: 1, serve: false },
-      away: { name: 'BRA', flag: 'br', score: 0, sets: 0, serve: true },
+    let state = {
+      home: { name: 'THA', flag: 'th', pts: 0, sets: 1, serve: false },
+      away: { name: 'BRA', flag: 'br', pts: 0, sets: 0, serve: true },
       lastScored: 'away'
     };
 
     function render() {
-      document.getElementById('code-home').innerText = match.home.name;
-      document.getElementById('code-away').innerText = match.away.name;
+      document.getElementById('code-home').textContent = state.home.name;
+      document.getElementById('code-away').textContent = state.away.name;
 
-      document.getElementById('flag-home').src = `https://flagcdn.com/w80/${match.home.flag.toLowerCase()}.png`;
-      document.getElementById('flag-away').src = `https://flagcdn.com/w80/${match.away.flag.toLowerCase()}.png`;
+      document.getElementById('flag-home').src = `https://flagcdn.com/w80/${state.home.flag.toLowerCase()}.png`;
+      document.getElementById('flag-away').src = `https://flagcdn.com/w80/${state.away.flag.toLowerCase()}.png`;
 
-      document.getElementById('pts-home').innerText = match.home.score;
-      document.getElementById('pts-away').innerText = match.away.score;
-      document.getElementById('sets-home').innerText = match.home.sets;
-      document.getElementById('sets-away').innerText = match.away.sets;
+      document.getElementById('pts-home').innerText = state.home.pts;
+      document.getElementById('pts-away').innerText = state.away.pts;
+      document.getElementById('sets-home').innerText = state.home.sets;
+      document.getElementById('sets-away').innerText = state.away.sets;
 
-      document.getElementById('ball-home').classList.toggle('active', match.home.serve);
-      document.getElementById('ball-away').classList.toggle('active', match.away.serve);
+      document.getElementById('ball-home').classList.toggle('active', state.home.serve);
+      document.getElementById('ball-away').classList.toggle('active', state.away.serve);
 
-      // จัดการเอฟเฟกต์ 3D Perspective
-      document.getElementById('code-home').classList.toggle('point-anim', match.lastScored === 'home');
-      document.getElementById('code-away').classList.toggle('point-anim', match.lastScored === 'away');
+      // สลับเอฟเฟกต์ Perspective สโลปเอียงตามผู้ได้คะแนน
+      document.getElementById('box-home').classList.toggle('point-scored', state.lastScored === 'home');
+      document.getElementById('box-away').classList.toggle('point-scored', state.lastScored === 'away');
     }
 
     function updateTeams() {
-      match.home.name = document.getElementById('in-home-name').value.trim().toUpperCase() || 'THA';
-      match.away.name = document.getElementById('in-away-name').value.trim().toUpperCase() || 'BRA';
-      match.home.flag = document.getElementById('in-home-flag').value.trim().toLowerCase() || 'th';
-      match.away.flag = document.getElementById('in-away-flag').value.trim().toLowerCase() || 'br';
+      state.home.name = document.getElementById('in-h-name').value.trim().toUpperCase() || 'THA';
+      state.away.name = document.getElementById('in-a-name').value.trim().toUpperCase() || 'BRA';
+      state.home.flag = document.getElementById('in-h-flag').value.trim().toLowerCase() || 'th';
+      state.away.flag = document.getElementById('in-a-flag').value.trim().toLowerCase() || 'br';
       render();
     }
 
-    function addPoint(team) {
-      match[team].score++;
-      match.home.serve = (team === 'home');
-      match.away.serve = (team === 'away');
-      match.lastScored = team;
+    function addPt(team) {
+      state[team].pts++;
+      state.home.serve = (team === 'home');
+      state.away.serve = (team === 'away');
+      state.lastScored = team;
       render();
     }
 
-    function minusPoint(team) {
-      if (match[team].score > 0) { match[team].score--; render(); }
+    function subPt(team) {
+      if (state[team].pts > 0) { state[team].pts--; render(); }
     }
 
-    function addSet(team) { match[team].sets++; render(); }
-    function minusSet(team) { if (match[team].sets > 0) { match[team].sets--; render(); } }
+    function addSet(team) { state[team].sets++; render(); }
 
     function setServe(team) {
-      match.home.serve = (team === 'home');
-      match.away.serve = (team === 'away');
+      state.home.serve = (team === 'home');
+      state.away.serve = (team === 'away');
       render();
     }
 
-    function resetPoints() {
-      match.home.score = 0;
-      match.away.score = 0;
-      match.lastScored = null;
+    function resetPts() {
+      state.home.pts = 0;
+      state.away.pts = 0;
+      state.lastScored = null;
       render();
     }
 
     function resetAll() {
-      match.home.score = 0;
-      match.away.score = 0;
-      match.home.sets = 0;
-      match.away.sets = 0;
-      match.lastScored = null;
+      state.home.pts = 0;
+      state.away.pts = 0;
+      state.home.sets = 0;
+      state.away.sets = 0;
+      state.lastScored = null;
       render();
     }
 
