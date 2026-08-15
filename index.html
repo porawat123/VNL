@@ -48,7 +48,6 @@
       position: relative;
     }
 
-    /* --- แผงธงชาติ (เอียงนิดๆ ตามทรง VNL) --- */
     .flag-box {
       width: 65px;
       height: 100%;
@@ -63,7 +62,6 @@
       object-fit: cover;
     }
 
-    /* --- แผงชื่อทีม + สกอร์เซ็ต --- */
     .team-panel {
       display: flex;
       align-items: center;
@@ -73,22 +71,14 @@
       background: linear-gradient(180deg, #43177d 0%, #250b4a 100%);
     }
 
-    /* เส้นแถบสีฟ้าสว่างใต้ชื่อทีมฝั่ง THA/BRA */
-    .team-left .team-panel {
-      border-bottom: 4px solid #4db6ac;
-    }
-    .team-right .team-panel {
-      border-bottom: 4px solid #ffffff;
-    }
+    .team-left .team-panel { border-bottom: 4px solid #00e5ff; }
+    .team-right .team-panel { border-bottom: 4px solid #ffffff; }
 
-    .team-right {
-      flex-direction: row-reverse;
-    }
+    .team-right { flex-direction: row-reverse; }
 
-    /* ไอคอนลูกบอลเสิร์ฟ */
     .ball-icon {
-      width: 26px;
-      height: 26px;
+      width: 24px;
+      height: 24px;
       margin: 0 6px;
       background: radial-gradient(circle at 30% 30%, #fdd835, #f57f17);
       border-radius: 50%;
@@ -97,79 +87,54 @@
       display: none;
       z-index: 5;
     }
-    .ball-icon.active {
-      display: block;
-    }
+    .ball-icon.active { display: block; }
 
     /* --- Container ชื่อทีม --- */
-    .team-code-container {
-      position: relative;
-      height: 100%;
+    .team-code {
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 80px;
+      min-width: 85px;
+      height: 100%;
       z-index: 10;
+      position: relative;
     }
 
-    /* ตัวอักษรสถานะปกติ */
-    .team-code {
+    .char-item {
       font-size: 38px;
       font-weight: 700;
       color: #ffffff;
-      letter-spacing: 1px;
       line-height: 1;
       display: inline-block;
-      transition: all 0.2s ease-out;
+      transition: transform 0.2s ease-out;
     }
 
     /* 
-       --- 3D PERSPECTIVE ANIMATION (เหมือนในรูปเป๊ะ) ---
-       ขยายให้ปลายฝั่งที่ได้แต้มใหญ่ทะลุขอบบน-ล่าง
+       --- 3D PERSPECTIVE EFFECT (สโลปคางหมูทรง VNL) --- 
     */
+    
+    /* THA ได้คะแนน: ฝั่งซ้ายใหญ่ สโลปลดลงไปฝั่งขวา */
+    .team-left .team-code.point-anim .char-item:nth-child(1) { transform: scaleY(1.4) scaleX(1.1) translateY(-1px); }
+    .team-left .team-code.point-anim .char-item:nth-child(2) { transform: scaleY(1.22) translateY(-0.5px); }
+    .team-left .team-code.point-anim .char-item:nth-child(3) { transform: scaleY(1.05); }
 
-    /* THA ได้แต้ม: ตัว T ใหญ่พุ่งสูงทะลุขอบ แล้วสโลปต่ำลงไปทาง A */
-    .team-left .team-code.point-anim {
-      transform-style: preserve-3d;
-      transform-origin: left center;
-      transform: perspective(220px) rotateY(28deg) scaleY(1.35) scaleX(1.1) translateY(-1px);
-      text-shadow: -2px 4px 10px rgba(0,0,0,0.8);
-    }
+    /* BRA ได้คะแนน: ฝั่งซ้ายเล็ก สโลปใหญ่สูงทะลุขอบไปฝั่งขวา (เหมือนรูปที่ 1) */
+    .team-right .team-code.point-anim .char-item:nth-child(1) { transform: scaleY(1.05); }
+    .team-right .team-code.point-anim .char-item:nth-child(2) { transform: scaleY(1.22) translateY(-0.5px); }
+    .team-right .team-code.point-anim .char-item:nth-child(3) { transform: scaleY(1.4) scaleX(1.1) translateY(-1px); }
 
-    /* BRA ได้แต้ม: ตัว A ใหญ่พุ่งสูงทะลุขอบ แล้วสโลปเตี้ยลงไปทาง B (แบบในรูป 1) */
-    .team-right .team-code.point-anim {
-      transform-style: preserve-3d;
-      transform-origin: right center;
-      transform: perspective(220px) rotateY(-28deg) scaleY(1.35) scaleX(1.1) translateY(-1px);
-      text-shadow: 2px 4px 10px rgba(0,0,0,0.8);
-    }
-
-    /* --- กล่อง SETS --- */
     .sets-box {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin: 0 10px;
+      margin: 0 8px;
       z-index: 2;
     }
 
-    .sets-label {
-      font-size: 10px;
-      font-weight: 500;
-      color: #b39ddb;
-      line-height: 1;
-      letter-spacing: 0.5px;
-    }
+    .sets-label { font-size: 10px; font-weight: 500; color: #b39ddb; line-height: 1; }
+    .sets-score { font-size: 26px; font-weight: 700; color: #ffffff; line-height: 1; }
 
-    .sets-score {
-      font-size: 26px;
-      font-weight: 700;
-      color: #ffffff;
-      line-height: 1;
-    }
-
-    /* --- สกอร์แต้มตรงกลาง + โลโก้ VNL --- */
     .score-center-bar {
       display: flex;
       align-items: center;
@@ -180,30 +145,10 @@
       z-index: 2;
     }
 
-    .current-score {
-      font-size: 38px;
-      font-weight: 700;
-      color: #ffffff;
-      min-width: 32px;
-      text-align: center;
-      line-height: 1;
-    }
+    .current-score { font-size: 38px; font-weight: 700; color: #ffffff; min-width: 32px; text-align: center; line-height: 1; }
+    .vnl-logo-center { font-weight: 900; font-size: 20px; font-style: italic; color: #ff6d00; margin: 0 10px; }
 
-    /* โลโก้ VNL สไตล์แท่งส้มตรงกลาง */
-    .vnl-logo-center {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 12px;
-      font-weight: 900;
-      font-size: 22px;
-      font-style: italic;
-      color: #ff6d00;
-      letter-spacing: -1px;
-      text-shadow: 0 0 4px rgba(255,109,0,0.5);
-    }
-
-    /* Control Panel ด้านล่าง */
+    /* Control Panel */
     .control-panel {
       background: #1e1136;
       border: 1px solid #4a148c;
@@ -216,12 +161,15 @@
     .team-card { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; }
     .team-card h3 { font-size: 13px; color: #80deea; margin-bottom: 6px; }
     .input-row { display: flex; gap: 4px; margin-bottom: 6px; }
-    input[type="text"] { background: #0a0518; border: 1px solid #4a148c; color: #fff; padding: 4px 8px; font-weight: bold; width: 100%; text-transform: uppercase; }
-    .btn-row { display: flex; gap: 4px; }
+    input[type="text"] { background: #0a0518; border: 1px solid #4a148c; color: #fff; padding: 4px 8px; font-weight: bold; width: 100%; text-transform: uppercase; font-size: 12px; }
+    .btn-row { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 4px; }
     button { background: #4a148c; color: white; border: none; border-radius: 3px; padding: 6px 10px; font-weight: bold; font-size: 11px; cursor: pointer; }
     button:hover { background: #6a1b9a; }
     .btn-point { background: #00e5ff; color: #000; flex: 1; }
     .btn-serve { background: #ffc400; color: #000; }
+    .global-actions { display: flex; gap: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; justify-content: space-between; }
+    .btn-update { background: #00e676; color: #000; }
+    .btn-reset { background: #d50000; }
   </style>
 </head>
 <body>
@@ -237,9 +185,7 @@
         </div>
         <div class="team-panel">
           <div id="ball-home" class="ball-icon"></div>
-          <div class="team-code-container">
-            <span id="code-home" class="team-code">THA</span>
-          </div>
+          <div id="code-home" class="team-code"></div>
           <div class="sets-box">
             <span class="sets-label">SETS</span>
             <span id="sets-home" class="sets-score">1</span>
@@ -249,9 +195,9 @@
 
       <!-- SCORE CENTER -->
       <div class="score-center-bar">
-        <div id="pts-home" class="current-score">0</div>
+        <div id="pts-home" class="current-score">1</div>
         <div class="vnl-logo-center">VNL</div>
-        <div id="pts-away" class="current-score">0</div>
+        <div id="pts-away" class="current-score">2</div>
       </div>
 
       <!-- AWAY (RIGHT) -->
@@ -261,10 +207,7 @@
         </div>
         <div class="team-panel">
           <div id="ball-away" class="ball-icon active"></div>
-          <div class="team-code-container">
-            <!-- ตั้งค่าเริ่มต้นให้ BRA มีแอนิเมชัน 3D ทะลุขอบแบบใน รูปที่ 1 -->
-            <span id="code-away" class="team-code point-anim">BRA</span>
-          </div>
+          <div id="code-away" class="team-code point-anim"></div>
           <div class="sets-box">
             <span class="sets-label">SETS</span>
             <span id="sets-away" class="sets-score">0</span>
@@ -279,50 +222,81 @@
   <div class="control-panel">
     <div class="panel-grid">
       <div class="team-card">
-        <h3>HOME (THA)</h3>
-        <div class="btn-row" style="margin-bottom: 6px;">
-          <button class="btn-point" onclick="addPoint('home')">+1 แต้ม (ได้คะแนน)</button>
+        <h3>ทีมฝั่งซ้าย (HOME)</h3>
+        <div class="input-row">
+          <input type="text" id="input-home-name" value="THA" placeholder="ชื่อย่อ 3 ตัว">
+          <input type="text" id="input-home-country" value="th" placeholder="รหัสประเทศ">
         </div>
         <div class="btn-row">
-          <button class="btn-serve" onclick="setServe('home')">🎾 เสิร์ฟ</button>
+          <button class="btn-point" onclick="addPoint('home')">+1 แต้ม</button>
+          <button onclick="minusPoint('home')">-1</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn-serve" onclick="setServe('home')">🎾 ลูกเสิร์ฟ</button>
           <button onclick="addSet('home')">+1 เซ็ต</button>
+          <button onclick="minusSet('home')">-1 เซ็ต</button>
         </div>
       </div>
 
       <div class="team-card">
-        <h3>AWAY (BRA)</h3>
-        <div class="btn-row" style="margin-bottom: 6px;">
-          <button class="btn-point" onclick="addPoint('away')">+1 แต้ม (ได้คะแนน)</button>
+        <h3>ทีมฝั่งขวา (AWAY)</h3>
+        <div class="input-row">
+          <input type="text" id="input-away-name" value="BRA" placeholder="ชื่อย่อ 3 ตัว">
+          <input type="text" id="input-away-country" value="br" placeholder="รหัสประเทศ">
         </div>
         <div class="btn-row">
-          <button class="btn-serve" onclick="setServe('away')">🎾 เสิร์ฟ</button>
+          <button class="btn-point" onclick="addPoint('away')">+1 แต้ม</button>
+          <button onclick="minusPoint('away')">-1</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn-serve" onclick="setServe('away')">🎾 ลูกเสิร์ฟ</button>
           <button onclick="addSet('away')">+1 เซ็ต</button>
+          <button onclick="minusSet('away')">-1 เซ็ต</button>
         </div>
       </div>
+    </div>
+
+    <div class="global-actions">
+      <button class="btn-update" onclick="updateAllInfo()">⚡ บันทึกเปลี่ยนชื่อทีม & ธง</button>
+      <button onclick="resetPoints()">รีเซ็ตแต้ม (เซ็ตใหม่)</button>
+      <button class="btn-reset" onclick="resetAll()">รีเซ็ตทั้งหมด</button>
     </div>
   </div>
 
   <script>
     let match = {
-      home: { name: 'THA', score: 0, sets: 1, serve: false },
-      away: { name: 'BRA', score: 0, sets: 0, serve: true },
-      lastScored: 'away' // ตั้งค่าเริ่มต้นให้แสดงแบบรูปที่ 1 (BRA ได้แต้ม)
+      home: { name: 'THA', country: 'th', score: 1, sets: 1, serve: false },
+      away: { name: 'BRA', country: 'br', score: 2, sets: 0, serve: true },
+      lastScored: 'away'
     };
 
+    function generateStyledText(elementId, text) {
+      const container = document.getElementById(elementId);
+      container.innerHTML = '';
+      const chars = text.split('');
+      chars.forEach((char) => {
+        const span = document.createElement('span');
+        span.className = 'char-item';
+        span.innerText = char;
+        container.appendChild(span);
+      });
+    }
+
     function render() {
-      document.getElementById('code-home').innerText = match.home.name;
-      document.getElementById('code-away').innerText = match.away.name;
+      generateStyledText('code-home', match.home.name);
+      generateStyledText('code-away', match.away.name);
+
+      document.getElementById('flag-home').src = `https://flagcdn.com/w80/${match.home.country.toLowerCase()}.png`;
+      document.getElementById('flag-away').src = `https://flagcdn.com/w80/${match.away.country.toLowerCase()}.png`;
 
       document.getElementById('pts-home').innerText = match.home.score;
       document.getElementById('pts-away').innerText = match.away.score;
       document.getElementById('sets-home').innerText = match.home.sets;
       document.getElementById('sets-away').innerText = match.away.sets;
 
-      // จัดการลูกเสิร์ฟ
       document.getElementById('ball-home').classList.toggle('active', match.home.serve);
       document.getElementById('ball-away').classList.toggle('active', match.away.serve);
 
-      // จัดการ 3D Perspective ตอนได้แต้ม
       const codeHome = document.getElementById('code-home');
       const codeAway = document.getElementById('code-away');
 
@@ -338,14 +312,46 @@
       render();
     }
 
-    function addSet(team) {
-      match[team].sets++;
-      render();
+    function minusPoint(team) {
+      if (match[team].score > 0) { match[team].score--; render(); }
     }
+
+    function addSet(team) { match[team].sets++; render(); }
+    function minusSet(team) { if (match[team].sets > 0) { match[team].sets--; render(); } }
 
     function setServe(team) {
       match.home.serve = (team === 'home');
       match.away.serve = (team === 'away');
+      render();
+    }
+
+    function updateAllInfo() {
+      const hName = document.getElementById('input-home-name').value.trim().toUpperCase() || 'THA';
+      const aName = document.getElementById('input-away-name').value.trim().toUpperCase() || 'BRA';
+      const hCountry = document.getElementById('input-home-country').value.trim().toLowerCase() || 'th';
+      const aCountry = document.getElementById('input-away-country').value.trim().toLowerCase() || 'br';
+
+      match.home.name = hName;
+      match.away.name = aName;
+      match.home.country = hCountry;
+      match.away.country = aCountry;
+
+      render();
+    }
+
+    function resetPoints() {
+      match.home.score = 0;
+      match.away.score = 0;
+      match.lastScored = null;
+      render();
+    }
+
+    function resetAll() {
+      match.home.score = 0;
+      match.away.score = 0;
+      match.home.sets = 0;
+      match.away.sets = 0;
+      match.lastScored = null;
       render();
     }
 
