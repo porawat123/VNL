@@ -118,16 +118,16 @@
       transform-style: preserve-3d;
     }
 
-    /* ฝั่งซ้าย (HOME): หมุนมุมมอง 3D -> ฝั่งติดธงย่อเล็ก ฝั่งติดสกอร์ยืดใหญ่ */
+    /* ฝั่งซ้าย (HOME): ตัวแรก (T) ใหญ่สุด -> ตัวท้าย (A) เล็กสุด */
     .team-left .team-code.point-anim {
-      transform: perspective(250px) rotateY(-30deg) scale(1.1) !important;
-      transform-origin: right center;
-    }
-
-    /* ฝั่งขวา (AWAY): หมุนมุมมอง 3D -> ฝั่งติดสกอร์ยืดใหญ่ ฝั่งติดธงย่อเล็ก */
-    .team-right .team-code.point-anim {
       transform: perspective(250px) rotateY(30deg) scale(1.1) !important;
       transform-origin: left center;
+    }
+
+    /* ฝั่งขวา (AWAY): ตัวแรก (B) เล็กสุด -> ตัวท้าย (A) ใหญ่สุด */
+    .team-right .team-code.point-anim {
+      transform: perspective(250px) rotateY(-30deg) scale(1.1) !important;
+      transform-origin: right center;
     }
 
     .sets-box {
