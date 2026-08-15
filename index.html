@@ -6,7 +6,7 @@
   <title>VNL Scoreboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -39,7 +39,7 @@
       border-bottom: 4px solid #00e5ff;
       border-radius: 4px;
       height: 70px;
-      overflow: visible; /* ยอมให้ตัวอักษรยืดทะลุขอบ */
+      overflow: visible;
       position: relative;
     }
 
@@ -98,38 +98,32 @@
       visibility: visible;
     }
 
-    /* ตัวอักษรชื่อทีมปกติ */
-    .team-code {
+    /* --- SVG Container สำหรับยืดตัวอักษร 100% ชนขอบบน-ล่าง --- */
+    .svg-team-code {
+      width: 100px;
+      height: 70px; /* ความสูงเท่ากับความสูงแถบ vnl-bar (70px) ชนขอบพอดี */
+      z-index: 10;
+      overflow: visible;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .svg-team-code text {
       font-family: 'Oswald', sans-serif;
-      font-size: 52px;
       font-weight: 700;
       font-style: italic;
-      color: #ffffff;
-      letter-spacing: -1px;
-      line-height: 1;
-      text-transform: uppercase;
-      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.9);
-      display: inline-block;
-      min-width: 90px;
-      text-align: center;
-      transition: transform 0.25s ease-out, filter 0.25s ease-out;
-      z-index: 10;
-      position: relative;
+      fill: #ffffff;
+      filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.8));
     }
 
-    /* --- ปรับแต่งเอฟเฟกต์ยืดความสูงตัวอักษรด้านบนและล่างแนวตั้ง --- */
-    
-    /* ฝั่งซ้าย (HOME): ยืดด้านซ้ายให้สูงที่สุด หน้าใหญ่(ติดสกอร์)-หลังเล็ก(ติดธง) */
-    .team-left .team-code.point-anim {
-      transform-origin: right center; /* ยึดจุดหมุนฝั่งขวา (ติดสกอร์) */
-      /* ใช้ matrix เพื่อยืดความสูงแนวตั้ง หน้าใหญ่หลังเล็กโดยฐานไม่เอียง โค้ดนี้คือ matrix(ขยายX, 0, 0, ขยายY, 0, 0) perspective */
-      transform: matrix(1.1, 0, 0, 1.45, 0, 0) perspective(200px) rotateY(-25deg) !important;
+    /* เอฟเฟกต์ยืดพุ่งทะลุขอบเมื่อได้แต้ม */
+    .team-left .point-anim {
+      transform-origin: right center;
+      transform: scaleY(1.45) scaleX(1.1) skewY(-8deg); /* ยืดพุ่งข้ามขอบบน-ล่าง พร้อมเฉียงมิติ VNL */
     }
 
-    /* ฝั่งขวา (AWAY): ยืดด้านขวาให้สูงที่สุด หน้าใหญ่(ติดสกอร์)-หลังเล็ก(ติดธง) */
-    .team-right .team-code.point-anim {
-      transform-origin: left center; /* ยึดจุดหมุนฝั่งซ้าย (ติดสกอร์) */
-      transform: matrix(1.1, 0, 0, 1.45, 0, 0) perspective(200px) rotateY(25deg) !important;
+    .team-right .point-anim {
+      transform-origin: left center;
+      transform: scaleY(1.45) scaleX(1.1) skewY(8deg);
     }
 
     .sets-box {
@@ -296,7 +290,12 @@
           <img id="flag-home" src="https://flagcdn.com/w80/th.png" alt="THA">
         </div>
         <div id="ball-home" class="ball-icon active"></div>
-        <div id="code-home" class="team-code point-anim">THA</div>
+
+        <!-- ตัวอักษรฝั่ง HOME ใช้ SVG สั่งยืดเต็มขอบ 100% -->
+        <svg id="code-home" class="svg-team-code point-anim" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <text id="text-home" x="50%" y="82%" text-anchor="middle" font-size="95">THA</text>
+        </svg>
+
         <div class="sets-box">
           <span class="sets-label">SETS</span>
           <span id="sets-home" class="sets-score">0</span>
@@ -304,9 +303,9 @@
       </div>
 
       <div class="score-center">
-        <div id="pts-home" class="current-score">21</div>
+        <div id="pts-home" class="current-score">1</div>
         <div class="score-divider">:</div>
-        <div id="pts-away" class="current-score">9</div>
+        <div id="pts-away" class="current-score">0</div>
       </div>
 
       <div class="team-section team-right">
@@ -314,7 +313,12 @@
           <img id="flag-away" src="https://flagcdn.com/w80/br.png" alt="BRA">
         </div>
         <div id="ball-away" class="ball-icon"></div>
-        <div id="code-away" class="team-code">BRA</div>
+
+        <!-- ตัวอักษรฝั่ง AWAY -->
+        <svg id="code-away" class="svg-team-code" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <text id="text-away" x="50%" y="82%" text-anchor="middle" font-size="95">BRA</text>
+        </svg>
+
         <div class="sets-box">
           <span class="sets-label">SETS</span>
           <span id="sets-away" class="sets-score">0</span>
@@ -370,14 +374,15 @@
 
   <script>
     let match = {
-      home: { name: 'THA', country: 'th', score: 21, sets: 0, serve: true },
-      away: { name: 'BRA', country: 'br', score: 9, sets: 0, serve: false },
+      home: { name: 'THA', country: 'th', score: 1, sets: 0, serve: true },
+      away: { name: 'BRA', country: 'br', score: 0, sets: 0, serve: false },
       lastScored: 'home'
     };
 
     function render() {
-      document.getElementById('code-home').innerText = match.home.name;
-      document.getElementById('code-away').innerText = match.away.name;
+      document.getElementById('text-home').textContent = match.home.name;
+      document.getElementById('text-away').textContent = match.away.name;
+
       document.getElementById('flag-home').src = `https://flagcdn.com/w80/${match.home.country.toLowerCase()}.png`;
       document.getElementById('flag-away').src = `https://flagcdn.com/w80/${match.away.country.toLowerCase()}.png`;
 
