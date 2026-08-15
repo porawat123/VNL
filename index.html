@@ -39,7 +39,7 @@
       border-bottom: 4px solid #00e5ff;
       border-radius: 4px;
       height: 70px;
-      overflow: visible; /* ยอมให้ตัวอักษรยืดทะลุขอบ */
+      overflow: visible;
       position: relative;
     }
 
@@ -115,16 +115,19 @@
       transition: transform 0.25s ease-out;
       z-index: 10;
       position: relative;
+      transform-style: preserve-3d;
     }
 
-    /* ฝั่งซ้าย (HOME): skewY(12deg) */
+    /* ฝั่งซ้าย (HOME): หมุนมุมมอง 3D -> ฝั่งติดธงย่อเล็ก ฝั่งติดสกอร์ยืดใหญ่ */
     .team-left .team-code.point-anim {
-      transform: skewY(12deg) scaleY(1.45) scaleX(1.1) !important;
+      transform: perspective(250px) rotateY(-30deg) scale(1.1) !important;
+      transform-origin: right center;
     }
 
-    /* ฝั่งขวา (AWAY): skewY(-12deg) */
+    /* ฝั่งขวา (AWAY): หมุนมุมมอง 3D -> ฝั่งติดสกอร์ยืดใหญ่ ฝั่งติดธงย่อเล็ก */
     .team-right .team-code.point-anim {
-      transform: skewY(-12deg) scaleY(1.45) scaleX(1.1) !important;
+      transform: perspective(250px) rotateY(30deg) scale(1.1) !important;
+      transform-origin: left center;
     }
 
     .sets-box {
