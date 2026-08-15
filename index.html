@@ -39,7 +39,7 @@
       border-bottom: 4px solid #00e5ff;
       border-radius: 4px;
       height: 70px;
-      overflow: visible;
+      overflow: hidden; /* ป้องกันไม่ให้ส่วนประกอบล้นออกนอกแผงหลัก */
       position: relative;
     }
 
@@ -98,40 +98,44 @@
       visibility: visible;
     }
 
-    /* Container ชื่อทีม */
+    /* --- Container ชื่อทีม --- */
     .team-code {
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 100px;
+      min-width: 90px;
       height: 70px;
       z-index: 10;
       position: relative;
-      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.25s ease-out;
     }
 
+    /* ตัวอักษรชื่อทีมขนาดมาตรฐาน */
     .char-item {
       font-family: 'Oswald', sans-serif;
-      font-size: 64px;
+      font-size: 40px; /* ลดขนาดจาก 64px ให้พอดีแผง ไม่แน่นเกินไป */
       font-weight: 700;
       font-style: italic;
       color: #ffffff;
-      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.9);
+      text-shadow: 0 3px 8px rgba(0, 0, 0, 0.9);
       display: inline-block;
       line-height: 1;
     }
 
-    /* 3D PERSPECTIVE REAL EFFECT */
+    /* --- PERSPECTIVE 3D (ตอนได้แต้ม) --- */
+    
+    /* ฝั่งซ้าย (HOME): บิด 3D ให้ฝั่งติดสกอร์ใหญ่ขึ้นพุ่งชนขอบ */
     .team-left .team-code.point-anim {
       transform-style: preserve-3d;
-      transform-origin: center center;
-      transform: perspective(150px) rotateY(-32deg) scaleX(1.15) scaleY(1.1);
+      transform-origin: right center; /* ยึดแกนฝั่งติดสกอร์ */
+      transform: perspective(400px) rotateY(-22deg) scaleY(1.3) scaleX(1.05);
     }
 
+    /* ฝั่งขวา (AWAY): บิด 3D ให้ฝั่งติดสกอร์ใหญ่ขึ้นพุ่งชนขอบ */
     .team-right .team-code.point-anim {
       transform-style: preserve-3d;
-      transform-origin: center center;
-      transform: perspective(150px) rotateY(32deg) scaleX(1.15) scaleY(1.1);
+      transform-origin: left center; /* ยึดแกนฝั่งติดสกอร์ */
+      transform: perspective(400px) rotateY(22deg) scaleY(1.3) scaleX(1.05);
     }
 
     .sets-box {
@@ -306,9 +310,9 @@
       </div>
 
       <div class="score-center">
-        <div id="pts-home" class="current-score">1</div>
+        <div id="pts-home" class="current-score">2</div>
         <div class="score-divider">:</div>
-        <div id="pts-away" class="current-score">0</div>
+        <div id="pts-away" class="current-score">1</div>
       </div>
 
       <div class="team-section team-right">
@@ -372,8 +376,8 @@
 
   <script>
     let match = {
-      home: { name: 'THA', country: 'th', score: 1, sets: 0, serve: true },
-      away: { name: 'BRA', country: 'br', score: 0, sets: 0, serve: false },
+      home: { name: 'THA', country: 'th', score: 2, sets: 0, serve: true },
+      away: { name: 'BRA', country: 'br', score: 1, sets: 0, serve: false },
       lastScored: 'home'
     };
 
