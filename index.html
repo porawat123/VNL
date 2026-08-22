@@ -39,7 +39,8 @@
       border-bottom: 4px solid #00e5ff;
       border-radius: 4px;
       height: 70px;
-      overflow: visible; /* ยอมให้ตัวอักษรยืดทะลุขอบ */
+      /* ปรับ overflow เป็น visible เพื่อให้ตัวหนังสือพุ่งสูงขึ้นได้ */
+      overflow: visible; 
       position: relative;
     }
 
@@ -112,24 +113,26 @@
       display: inline-block;
       min-width: 90px;
       text-align: center;
-      transition: transform 0.25s ease-out, filter 0.25s ease-out;
+      transition: transform 0.25s ease-out;
       z-index: 10;
       position: relative;
+      /* ปรับความสูงและช่องไฟเพื่อให้ฐานขยายลงล่าง */
+      height: 60px;
+      margin-top: 10px;
     }
 
-    /* --- ปรับแต่งเอฟเฟกต์ยืดความสูงตัวอักษรด้านบนและล่างแนวตั้ง --- */
+    /* --- ปรับแต่งเอฟเฟกต์มิติ 3D (Perspective) --- */
     
-    /* ฝั่งซ้าย (HOME): ยืดด้านซ้ายให้สูงที่สุด หน้าใหญ่(ติดสกอร์)-หลังเล็ก(ติดธง) */
+    /* ฝั่งซ้าย (HOME): ตัว T ขยายใหญ่สุด -> ตัว A บีบเล็กสุด */
     .team-left .team-code.point-anim {
-      transform-origin: right center; /* ยึดจุดหมุนฝั่งขวา (ติดสกอร์) */
-      /* ใช้ matrix เพื่อยืดความสูงแนวตั้ง หน้าใหญ่หลังเล็กโดยฐานไม่เอียง โค้ดนี้คือ matrix(ขยายX, 0, 0, ขยายY, 0, 0) perspective */
-      transform: matrix(1.1, 0, 0, 1.45, 0, 0) perspective(200px) rotateY(-25deg) !important;
+      transform: perspective(300px) rotateY(-35deg) scale(1.15) !important;
+      transform-origin: right center;
     }
 
-    /* ฝั่งขวา (AWAY): ยืดด้านขวาให้สูงที่สุด หน้าใหญ่(ติดสกอร์)-หลังเล็ก(ติดธง) */
+    /* ฝั่งขวา (AWAY): ตัว B บีบเล็กสุด -> ตัว A ขยายใหญ่สุด */
     .team-right .team-code.point-anim {
-      transform-origin: left center; /* ยึดจุดหมุนฝั่งซ้าย (ติดสกอร์) */
-      transform: matrix(1.1, 0, 0, 1.45, 0, 0) perspective(200px) rotateY(25deg) !important;
+      transform: perspective(300px) rotateY(35deg) scale(1.15) !important;
+      transform-origin: left center;
     }
 
     .sets-box {
@@ -304,9 +307,9 @@
       </div>
 
       <div class="score-center">
-        <div id="pts-home" class="current-score">21</div>
+        <div id="pts-home" class="current-score">1</div>
         <div class="score-divider">:</div>
-        <div id="pts-away" class="current-score">9</div>
+        <div id="pts-away" class="current-score">0</div>
       </div>
 
       <div class="team-section team-right">
@@ -370,8 +373,8 @@
 
   <script>
     let match = {
-      home: { name: 'THA', country: 'th', score: 21, sets: 0, serve: true },
-      away: { name: 'BRA', country: 'br', score: 9, sets: 0, serve: false },
+      home: { name: 'THA', country: 'th', score: 1, sets: 0, serve: true },
+      away: { name: 'BRA', country: 'br', score: 0, sets: 0, serve: false },
       lastScored: 'home'
     };
 
